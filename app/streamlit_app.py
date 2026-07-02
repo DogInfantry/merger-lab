@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from data_layer import fetch_company
+from data_layer import fetch_company, load_screener_csv, merge_financials
 from deal import DealTerms
 from deal_package import build_deal_package
 from excel_generator import generate_excel
@@ -50,6 +50,19 @@ def _fetch(ticker: str):
     return fetch_company(ticker)
 
 
+def _resolve(ticker: str, screener_file):
+    """yfinance market data, with Screener.in fundamentals merged in if uploaded.
+
+    Not cached: uploaded file objects aren't hashable. The yfinance leg still
+    hits the 1h cache via _fetch(); merging is cheap.
+    """
+    market = _fetch(ticker)
+    if screener_file is None:
+        return market
+    screener_file.seek(0)  # rewind: the buffer may be at EOF from a prior rerun
+    return merge_financials(load_screener_csv(screener_file, ticker=ticker), market)
+
+
 @st.cache_resource
 def _precedents():
     conn = get_connection(":memory:")
@@ -68,6 +81,12 @@ with st.sidebar:
         codename = st.text_input("Project codename", "Project Horizon")
         acq_ticker = st.text_input("Acquirer ticker (.NS/.BO)", "INFY.NS")
         tgt_ticker = st.text_input("Target ticker (.NS/.BO)", "PERSISTENT.NS")
+        with st.expander("Screener.in CSV fallback (optional)"):
+            st.caption("Upload a company's Screener.in export to override "
+                       "yfinance fundamentals when Yahoo data is stale or wrong. "
+                       "Price and share count still come from yfinance.")
+            acq_csv = st.file_uploader("Acquirer Screener CSV", type="csv", key="acq_csv")
+            tgt_csv = st.file_uploader("Target Screener CSV", type="csv", key="tgt_csv")
         sector = st.selectbox("Sector (for precedent comps)", ["—"] + sectors)
         premium = st.slider("Offer premium %", -10.0, 60.0, 18.0, 0.5)
         stake = st.slider("Negotiated stake %", 26.0, 100.0, 100.0, 1.0)
@@ -88,6 +107,7 @@ with st.sidebar:
 if run:
     st.session_state["inputs"] = dict(
         codename=codename, acq=acq_ticker, tgt=tgt_ticker, sector=sector,
+        acq_csv=acq_csv, tgt_csv=tgt_csv,
         premium=premium, stake=stake, pct_cash=pct_cash, pct_debt=pct_debt,
         rate=rate, cash_yield=cash_yield, synergies=synergies,
         integration=integration, writeup=writeup, acceptance=acceptance,
@@ -100,10 +120,14 @@ if "inputs" not in st.session_state:
     st.stop()
 
 I = st.session_state["inputs"]
-acq, tgt = _fetch(I["acq"]), _fetch(I["tgt"])
+acq = _resolve(I["acq"], I.get("acq_csv"))
+tgt = _resolve(I["tgt"], I.get("tgt_csv"))
 if not (acq.price and tgt.price and tgt.shares_out_cr):
     st.error("Could not fetch usable market data for those tickers.")
     st.stop()
+for c in (acq, tgt):
+    if c.source.startswith("screener"):
+        st.caption(f"↳ {c.ticker}: fundamentals merged from uploaded Screener.in CSV")
 
 vol = None
 if I["want_collar"] and I["pct_cash"] < 100:
