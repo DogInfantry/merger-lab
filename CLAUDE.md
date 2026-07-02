@@ -35,9 +35,13 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
 - **Phase 4 (DONE):** collar.py (BS via math.erf, put−call collar decomposition,
   payoff grid, annualized_vol + realized_vol_yf), merger_arb.py (implied close
   probability, out-of-bounds flagged not clamped). tests/test_derivatives.py 7/7.
-- **Phase 5 (next):** memo_generator.py + templates/ic_memo.html (WeasyPrint,
-  fpdf2 fallback on Windows), excel_generator.py (openpyxl, live formulas).
-- Phase 6: Streamlit + samples + Vercel landing page + README.
+- **Phase 5 (DONE):** deal_package.py (orchestrator + recommendation rules),
+  memo_generator.py + templates/ic_memo.html (inline-SVG charts, headless-Edge
+  PDF on Windows / WeasyPrint elsewhere), excel_generator.py (10 tabs, live
+  cross-referenced formulas, Δ-vs-engine tie-out column).
+  tests/test_generators.py 5/5; 25 tests total green.
+- **Phase 6 (next):** app/streamlit_app.py, samples/ (2–3 large-cap demo
+  deals), site/index.html (Vercel landing), README.md.
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`

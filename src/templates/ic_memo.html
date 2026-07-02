@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ pkg.codename }} — Investment Committee Memorandum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#070B14; --gold:#C9A84C; --ink:#1a1d24; --muted:#5a6170; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page {
+    size: A4; margin: 22mm 16mm 20mm 16mm;
+    @bottom-center { content: "MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE";
+                     font-family: "IBM Plex Sans", sans-serif; font-size: 7.5pt; color: #5a6170; }
+    @bottom-right  { content: counter(page); font-family: "IBM Plex Sans", sans-serif;
+                     font-size: 8pt; color: #5a6170; }
+  }
+  body { font-family: "IBM Plex Sans", "Segoe UI", sans-serif; color: var(--ink);
+         font-size: 9.5pt; line-height: 1.45; }
+  h1, h2, h3 { font-family: "IBM Plex Serif", Georgia, serif; color: var(--navy); }
+  h2 { font-size: 13pt; border-bottom: 2px solid var(--gold); padding: 14px 0 4px;
+       margin-bottom: 8px; page-break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 10px 0 4px; }
+  p  { margin: 4px 0; }
+  .footer-band { position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
+                 font-size: 7.5pt; color: var(--muted); padding: 2mm 0;
+                 border-top: 0.5pt solid #d8dbe0; background: #fff; }
+  @media screen { .footer-band { display: none; } }
+
+  .cover { background: var(--navy); color: #eef0f4; padding: 34px 30px; margin-bottom: 14px; }
+  .cover .lab { font-family: "IBM Plex Mono", monospace; color: var(--gold);
+                font-size: 8.5pt; letter-spacing: 3px; }
+  .cover h1 { color: #fff; font-size: 24pt; margin: 10px 0 2px; }
+  .cover .sub { color: #aab2c0; font-size: 10pt; }
+  .rec-box { margin-top: 18px; border: 1.5px solid var(--gold); padding: 14px 18px; }
+  .rec-box .verdict { font-family: "IBM Plex Serif", serif; font-size: 16pt;
+                      color: var(--gold); font-weight: 700; }
+  .kpi-row { display: flex; gap: 26px; margin-top: 10px; }
+  .kpi .v { font-size: 13pt; font-weight: 600; color: #fff; }
+  .kpi .k { font-size: 7.5pt; color: #aab2c0; text-transform: uppercase; letter-spacing: 1px; }
+
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 8.6pt; }
+  th, td { padding: 3.5px 7px; text-align: right; border-bottom: 0.5pt solid #d8dbe0; }
+  th { background: var(--navy); color: #fff; font-weight: 500; }
+  td:first-child, th:first-child { text-align: left; }
+  tr.total td { border-top: 1.2pt solid var(--navy); font-weight: 600; }
+  .grid th, .grid td { text-align: center; font-size: 8pt; padding: 3px 5px; }
+  .grid th:first-child { text-align: right; }
+  .pass { color: #1d7a4a; font-weight: 700; }
+  .fail { color: #b02a1e; font-weight: 700; }
+  .flag { background: #fdf6e3; border-left: 3px solid var(--gold);
+          padding: 8px 12px; margin: 8px 0; font-size: 9pt; }
+  .warn { background: #fbeae8; border-left: 3px solid #b02a1e;
+          padding: 8px 12px; margin: 8px 0; font-size: 9pt; font-weight: 600; }
+  .muted { color: var(--muted); font-size: 8.3pt; }
+  ul { margin: 4px 0 8px 18px; }
+  li { margin: 2.5px 0; }
+  section { page-break-inside: avoid; }
+  .pagebreak { page-break-before: always; }
+  svg { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="footer-band">MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE</div>
+
+<!-- 1. COVER / RECOMMENDATION -->
+<div class="cover">
+  <div class="lab">MERGER LAB · INVESTMENT COMMITTEE MEMORANDUM</div>
+  <h1>{{ pkg.codename }}</h1>
+  <div class="sub">{{ pkg.acquirer.name }} &nbsp;/&nbsp; {{ pkg.target.name }}
+       &nbsp;·&nbsp; prepared {{ pkg.acquirer.asof or "" }}</div>
+  <div class="rec-box">
+    <div class="verdict">{{ pkg.recommendation }}</div>
+    <p style="color:#dfe3ea; margin-top:6px;">{{ pkg.recommendation_rationale }}</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">{{ pkg.ad.year1_accretion_pct|pct }}</div><div class="k">Year-1 EPS impact</div></div>
+      <div class="kpi"><div class="v">{{ "%.0f%%"|format(pkg.mc.p_y2_accretive * 100) }}</div><div class="k">P(accretive by Y2)</div></div>
+      <div class="kpi"><div class="v">{{ pkg.value_bridge.net_value_created_cr|inr }}</div><div class="k">Net value created</div></div>
+      <div class="kpi"><div class="v">{{ pkg.premium_pct|pct }}</div><div class="k">Offer premium</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. TRANSACTION SUMMARY -->
+<section>
+<h2>2 · Transaction Summary</h2>
+<table>
+  <tr><th>Term</th><th>Value</th><th>Term</th><th>Value</th></tr>
+  <tr><td>Acquirer</td><td>{{ pkg.acquirer.name }} ({{ pkg.acquirer.ticker }})</td>
+      <td>Offer price</td><td>₹{{ pkg.terms.offer_price|num }}</td></tr>
+  <tr><td>Target</td><td>{{ pkg.target.name }} ({{ pkg.target.ticker }})</td>
+      <td>Premium to undisturbed</td><td>{{ pkg.premium_pct|pct }}</td></tr>
+  <tr><td>Negotiated stake</td><td>{{ "%.0f%%"|format(pkg.terms.stake_pct) }}</td>
+      <td>Consideration</td><td>{{ "%.0f%% cash / %.0f%% stock"|format(pkg.terms.pct_cash, pkg.terms.pct_stock) }}</td></tr>
+  <tr><td>Equity purchase (negotiated)</td><td>{{ pkg.su.equity_purchase_cr|inr }}</td>
+      <td>Implied EV / EBITDA</td><td>{{ pkg.ev_ebitda_offer|num(1) }}x</td></tr>
+  <tr><td>Open offer (at {{ "%.0f%%"|format(pkg.acceptance_assumption_pct) }} acceptance)</td><td>{{ pkg.open_offer_cost_cr|inr }}</td>
+      <td>Implied P / E</td><td>{{ pkg.pe_offer|num(1) }}x</td></tr>
+</table>
+{% if pkg.sector_premium_percentile is not none %}
+<p class="muted">Premium at the {{ "%.0f"|format(pkg.sector_premium_percentile) }}th percentile of
+sector precedents (Merger Lab precedent DB; entries marked ILLUSTRATIVE pending filing verification).</p>
+{% endif %}
+</section>
+
+<!-- 3. STRATEGIC RATIONALE -->
+{% if pkg.strategic_rationale %}
+<section>
+<h2>3 · Strategic Rationale</h2>
+<ul>{% for b in pkg.strategic_rationale %}<li>{{ b }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+
+<!-- 4. REGULATORY STACK -->
+<section class="pagebreak">
+<h2>4 · Regulatory Stack — RBI · SEBI SAST · CCI</h2>
+
+<h3>4a · Sources &amp; Uses across open-offer acceptance scenarios</h3>
+<table>
+  <tr><th>₹ Cr</th>{% for acc in pkg.su_scenarios %}<th>{{ "%.0f%%"|format(acc) }} acceptance</th>{% endfor %}</tr>
+  <tr><td>Equity purchase (negotiated)</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.equity_purchase_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>Open offer consideration</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.open_offer_cost_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>Refinance target debt</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.refinance_debt_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>Transaction fees</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.fees_cr|inr }}</td>{% endfor %}</tr>
+  <tr class="total"><td>Total uses</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.total_uses_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>New acquirer stock</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.new_stock_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>New bank debt</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.new_debt_cr|inr }}</td>{% endfor %}</tr>
+  <tr><td>Balance-sheet cash</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.balance_sheet_cash_cr|inr }}</td>{% endfor %}</tr>
+  <tr class="total"><td>Total sources</td>{% for s in pkg.su_scenarios.values() %}<td>{{ s.total_sources_cr|inr }}</td>{% endfor %}</tr>
+</table>
+
+<h3>4b · RBI acquisition-finance compliance <span class="muted">(Amendment Directions 2026, at {{ "%.0f%%"|format(pkg.acceptance_assumption_pct) }} acceptance)</span></h3>
+<table>
+  <tr><th>Check</th><th>Value</th><th>Threshold</th><th>Status</th><th>Note</th></tr>
+  {% for c in pkg.rbi.checks %}
+  <tr><td>{{ c.name }}</td><td>{{ c.value }}</td><td>{{ c.threshold }}</td>
+      <td class="{{ 'pass' if c.status == 'PASS' else 'fail' }}">{{ c.status }}</td>
+      <td style="text-align:left" class="muted">{{ c.explanation }}</td></tr>
+  {% endfor %}
+</table>
+<div class="flag">{{ pkg.optimizer.narrative }}
+Optimal mix: {{ "%.0f%% cash / %.0f%% stock, %.0f%% of cash needs debt-funded"|format(
+  pkg.optimizer.pct_cash, pkg.optimizer.pct_stock, pkg.optimizer.pct_new_debt_of_cash_portion) }}
+→ Year-1 {{ pkg.optimizer.y1_accretion_pct|pct }}.</div>
+
+<h3>4c · SEBI Takeover Code (SAST 2011)</h3>
+<p>{{ pkg.sast.narrative }}</p>
+{% if pkg.sast.triggered %}
+<ul>{% for s in pkg.sast.scenarios %}<li>{{ s.narrative }}</li>{% endfor %}</ul>
+{% endif %}
+{% if pkg.sast.creeping_note %}<p class="muted">{{ pkg.sast.creeping_note }}</p>{% endif %}
+
+<h3>4d · CCI merger control</h3>
+<p>{% if pkg.sast.cci_approval_required %}{{ pkg.sast.cci_note }}{% else %}
+Deal value below the ₹2,000 Cr deal-value threshold; standard asset/turnover tests should still be confirmed.{% endif %}</p>
+</section>
+
+<!-- 5. ACCRETION / DILUTION -->
+<section class="pagebreak">
+<h2>5 · Accretion / Dilution Analysis</h2>
+<table>
+  <tr><th>Year</th><th>Combined NI (₹ Cr)</th><th>Pro-forma shares (Cr)</th>
+      <th>Pro-forma EPS</th><th>Standalone EPS</th><th>Accretion / (Dilution)</th></tr>
+  {% for y in pkg.ad.years %}
+  <tr><td>Year {{ y.year }}</td><td>{{ y.combined_ni_cr|inr }}</td>
+      <td>{{ y.pf_shares_cr|num }}</td><td>₹{{ y.pf_eps|num }}</td>
+      <td>₹{{ y.standalone_eps|num }}</td>
+      <td class="{{ 'pass' if y.accretion_pct > 0 else 'fail' }}">{{ y.accretion_pct|pct(2) }}</td></tr>
+  {% endfor %}
+</table>
+<p><strong>Break-even synergies (Year 1): {{ pkg.ad.breakeven_synergies_cr|inr }}</strong>
+   vs {{ pkg.terms.synergies_annual|inr }} assumed run-rate.</p>
+<p class="muted">{{ pkg.ad.heuristic_note }}</p>
+
+<h3>Contribution analysis</h3>
+<table>
+  <tr><th>Metric</th><th>Acquirer %</th><th>Target %</th></tr>
+  {% for r in pkg.contribution.to_dict("records") %}
+  <tr><td>{{ r["Metric"] }}</td><td>{{ r["Acquirer %"] }}</td><td>{{ r["Target %"] }}</td></tr>
+  {% endfor %}
+</table>
+{% if pkg.contribution_flag %}<div class="flag">{{ pkg.contribution_flag }}</div>{% endif %}
+
+<h3>Sensitivity — Year-1 accretion %</h3>
+<p class="muted">Premium (rows) × run-rate synergies ₹ Cr (columns)</p>
+{{ heat_prem_syn }}
+<p class="muted">% cash consideration (rows) × premium (columns)</p>
+{{ heat_cash_prem }}
+</section>
+
+<!-- 5.5 VALUE CREATION -->
+<section class="pagebreak">
+<h2>5.5 · Value Creation Assessment</h2>
+<table>
+  <tr><th>Bridge component</th><th>₹ Cr</th></tr>
+  <tr><td>PV of after-tax synergies (perpetuity at {{ "%.1f%%"|format(pkg.value_bridge.wacc_pct) }} WACC)</td>
+      <td>{{ pkg.value_bridge.pv_synergies_cr|inr }}</td></tr>
+  <tr><td>Control premium paid</td><td>({{ pkg.value_bridge.premium_paid_cr|inr }})</td></tr>
+  <tr class="total"><td>Net value created / (destroyed)</td>
+      <td class="{{ 'pass' if pkg.value_bridge.net_value_created_cr >= 0 else 'fail' }}">
+      {{ pkg.value_bridge.net_value_created_cr|inr }}</td></tr>
+</table>
+<p>Incremental ROIC {{ "%.1f%%"|format(pkg.value_bridge.roic_pct) }} vs WACC
+   {{ "%.1f%%"|format(pkg.value_bridge.wacc_pct) }} —
+   <span class="{{ 'pass' if pkg.value_bridge.roic_exceeds_wacc else 'fail' }}">
+   {{ "returns exceed the cost of capital" if pkg.value_bridge.roic_exceeds_wacc
+      else "returns below the cost of capital" }}</span>.</p>
+{% if pkg.value_bridge.mechanical_accretion_warning %}
+<div class="warn">Accretive but value-destructive — EPS accretion is driven by P/E arbitrage, not economics.</div>
+{% endif %}
+</section>
+
+<!-- 6. RISK ANALYSIS -->
+<section>
+<h2>6 · Risk Analysis</h2>
+<p>{{ pkg.mc.memo_line() }}. Year-1: P5 {{ pkg.mc.y1_p5|pct }} · P50 {{ pkg.mc.y1_p50|pct }} · P95 {{ pkg.mc.y1_p95|pct }}.</p>
+{{ mc_hist_svg }}
+{% if collar_svg %}
+<h3>Exchange-ratio collar (stock component)</h3>
+<p>{{ pkg.collar.explanation }}</p>
+{{ collar_svg }}
+{% endif %}
+{% if pkg.key_risks %}
+<h3>Key risks</h3>
+<ul>{% for r in pkg.key_risks %}<li>{{ r }}</li>{% endfor %}</ul>
+{% endif %}
+</section>
+
+<!-- 7. APPENDIX -->
+<section class="pagebreak">
+<h2>7 · Appendix — Methodology &amp; Sources</h2>
+<ul class="muted">
+  <li>Engine: Year 1–3 pro-forma EPS vs standalone acquirer EPS held flat; combined NI = acquirer NI + owned% × target NI + after-tax phased synergies − after-tax new interest − after-tax foregone cash yield − after-tax incremental D&amp;A − after-tax Year-1 integration costs.</li>
+  <li>PPA: intangible write-up on excess over owned book value, DTL at deal tax rate, straight-line amortization; PP&amp;E step-up out of scope.</li>
+  <li>RBI: Commercial Banks – Credit Facilities (Amendment) Directions 2026 — 75% funding cap, 25% equity floor, 3:1 consolidated D/E, ₹500 Cr net worth, 3-yr profitability (user-attested). Verify against the master direction.</li>
+  <li>SEBI SAST 2011: 25% open-offer trigger, minimum 26% offer size; floor modeled at deal offer price (real floor = highest-of tests incl. 60-day VWAP). MPS per SCRR 19A.</li>
+  <li>Monte Carlo: 10,000 seeded iterations; synergies triangular (50/100/130% of base), integration costs lognormal, phase-in delay discrete.</li>
+  <li>Value bridge: after-tax synergy perpetuity at user WACC (0% growth) less control premium on shares acquired.</li>
+  <li>Data: yfinance (prices, financials), Screener.in exports (fundamentals fallback), curated precedent DB from SEBI SAST letters of offer and NSE/BSE filings. Debt cost anchored to RBI DBIE lending-rate publications; risk-free = 10Y G-Sec (CCIL/FIMMDA). No paid APIs, no scraping, no LLM calls.</li>
+  <li><strong>Disclaimer:</strong> Illustrative analysis on public data for portfolio demonstration. Precedent entries marked ILLUSTRATIVE are unverified. Not investment advice, not a solicitation, not a fairness opinion.</li>
+</ul>
+</section>
+</body>
+</html>

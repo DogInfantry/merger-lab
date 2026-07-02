@@ -1,6 +1,51 @@
 # HANDOFF — living state doc
 
-## Current status: Phase 4 COMPLETE (2026-07-02) — awaiting AR review
+## Current status: Phase 5 COMPLETE (2026-07-02) — awaiting AR review
+
+### Phase 5 completed
+- `src/deal_package.py` (new orchestrator, not in spec file list — justified:
+  memo and Excel must consume ONE frozen result set so they can never
+  disagree). Runs SAST → per-scenario S&U → RBI → A/D → contribution →
+  optimizer → MC → value bridge → collar (stock deals w/ vol) → precedent
+  percentile. Mechanical recommendation rules documented in docstring
+  (DECLINE / PROCEED WITH CONDITIONS / PROCEED).
+- `src/memo_generator.py` + `src/templates/ic_memo.html` — Pyramid-principle
+  memo, all 7 spec sections + 5.5. Navy #070B14 / gold #C9A84C, IBM Plex,
+  fixed footer band "MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE".
+  Charts are Python-generated inline SVG (MC histogram, collar payoff) — no
+  matplotlib. Heat-styled sensitivity tables. Indian formatting filters
+  (₹6,28,000 Cr). PDF chain: WeasyPrint if importable → headless Edge/Chrome
+  --print-to-pdf (Windows path) → HTML fallback with warning. Page numbers
+  only under WeasyPrint (Chromium margin-box limitation, documented).
+- `src/excel_generator.py` — 10 tabs. Assumptions (blue-font hardcodes) is
+  the single input source; S&U (3 acceptance-scenario formula columns +
+  balance-check row), PPA, Pro-Forma P&L, Accretion-Dilution, Contribution,
+  Value Bridge, Regulatory (PASS/FAIL as live =IF() formulas) are ALL real
+  cross-referencing Excel formulas. Accretion-Dilution has a "Δ vs engine"
+  column (formula − frozen Python value; displays 0 → in-file tie-out
+  proof). Sensitivity + Precedent Comps are engine values (formulas would
+  need 99 model copies) with ColorScale conditional formatting.
+- `tests/test_generators.py` — 5 tests.
+
+### Phase 5 verification results (all pass)
+- Memo renders every section (asserted needle-by-needle), no unrendered
+  Jinja; PDF via headless Edge = valid %PDF header, 317 KB, vector SVG.
+- Excel: all 10 tabs present; S&U/A-D/P&L/Regulatory cells verified to be
+  formulas (start with "=", =IF() for PASS/FAIL); engine tie-out column
+  present; offer price hardcode = 60.0 on Assumptions.
+- Package: toy deal at 100% acceptance → total uses 1,534.68 Cr hand-checked
+  (1,200 + 312 open offer + 1.5% × 1,512 fees = 22.68).
+- Full regression: 7 + 6 + 7 + 5 = 25 tests green.
+- Dev outputs in samples/dev/ (toy deal — real large-cap samples are Phase 6).
+
+### Phase 5 decisions
+- deal_package.py added beyond spec file list (single source of truth for
+  both generators).
+- WeasyPrint not installed on Windows (GTK pain); headless Edge is the
+  default PDF engine here. WeasyPrint path kept for Linux/Streamlit Cloud.
+- AR manual check recommended: open project_anchor_model.xlsx, change an
+  assumption (e.g. offer price), watch S&U/A-D recalc and Δ-engine column
+  move off 0; open memo PDF and check typography/pagination.
 
 ### Phase 4 completed
 - `src/collar.py` — Black-Scholes call/put (math.erf, no scipy dependency;
