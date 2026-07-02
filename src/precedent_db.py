@@ -44,7 +44,10 @@ CREATE TABLE IF NOT EXISTS deals (
 
 
 def get_connection(db_path: str | Path = DB_PATH) -> sqlite3.Connection:
-    conn = sqlite3.connect(db_path)
+    # check_same_thread=False: Streamlit runs each rerun on a new thread but the
+    # connection is shared across them via @st.cache_resource. Usage is read-only
+    # after the one-time load_seed(), so cross-thread access is safe here.
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.execute(SCHEMA)
     return conn
 
