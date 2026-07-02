@@ -28,10 +28,14 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   (5 checks), sebi_sast.py (open offer + MPS + CCI), ppa.py, accretion_dilution.py
   (Y1–3 + break-even + heuristic cross-check), contribution.py, sensitivity.py,
   tests/test_known_deal.py (7/7, hand-derived arithmetic in comments).
-- **Phase 3 (next):** optimizer.py (SLSQP/DE, RBI constraints), monte_carlo.py
-  (10k iters, seeded rng 42), value_bridge.py (synergy PV vs premium, ROIC vs WACC).
-- Phases 4–6: collar/merger arb → memo+Excel generators → Streamlit + samples +
-  Vercel landing page + README.
+- **Phase 3 (DONE):** optimizer.py (SLSQP multistart, real-engine objective,
+  binding-constraint narrative), monte_carlo.py (10k iters, rng(42), point-mass
+  == engine asserted), value_bridge.py (synergy PV vs premium, ROIC vs WACC,
+  mechanical-accretion warning). tests/test_quant_layer.py 6/6.
+- **Phase 4 (next):** collar.py (Black-Scholes put−call decomposition, yfinance
+  realized vol), merger_arb.py (implied close probability).
+- Phases 5–6: memo+Excel generators → Streamlit + samples + Vercel landing
+  page + README.
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`

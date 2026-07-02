@@ -1,6 +1,41 @@
 # HANDOFF — living state doc
 
-## Current status: Phase 2 COMPLETE (2026-07-02) — awaiting AR review
+## Current status: Phase 3 COMPLETE (2026-07-02) — awaiting AR review
+
+### Phase 3 completed
+- `src/optimizer.py` — SLSQP multistart over (pct_cash, pct_debt_of_cash);
+  pct_stock implied. Each evaluation runs the REAL engine (no surrogate).
+  Constraints: RBI 75% debt cap, 25% equity floor, 3.0x pro-forma D/E, plus
+  balance-sheet-cash availability and optional dilution ceiling. Reports
+  binding constraints for the memo narrative; net-worth/profitability checks
+  (mix-independent) reported separately via rbi_compliance.
+- `src/monte_carlo.py` — 10k iters, `default_rng(42)`. Synergies triangular
+  (50/100/130% of base), integration costs lognormal (mean = base), phase-in
+  delay discrete {0: 70%, 1: 30%}. Structure (S&U/PPA/shares) fixed; NI
+  recomputed with the same formula as the engine → point-mass config
+  reproduces deterministic result to 1e-9 (asserted). Returns P(Y2
+  accretive), P5/P50/P95 for Y1/Y2, raw samples for histograms, and
+  `memo_line()` in the spec's format.
+- `src/value_bridge.py` — synergy PV (after-tax perpetuity at WACC, 0% g),
+  control premium on shares actually acquired, net value created; mechanical-
+  accretion warning (Y1 accretive + negative bridge → "P/E arbitrage");
+  incremental ROIC (owned target NI + run-rate synergies after tax over total
+  Uses) vs WACC.
+- `ADResult` gained `owned_frac` field (value bridge needs it).
+- `tests/test_quant_layer.py` — 6 tests reusing the toy deal.
+
+### Phase 3 verification results (all pass)
+- Optimizer respects constraints: with cheap debt the 75% RBI cap binds and
+  is reported binding; dilution ceiling respected when stock is attractive;
+  optimum always ≥ base mix. Toy-deal optimum: 100% cash from balance sheet
+  → Y1 +3.70% (vs −0.83% base), interior optimum (no guardrail binds — the
+  toy acquirer is cash-rich).
+- Value bridge sanity law: zero synergies + 20% premium → −200 Cr (premium
+  hand-checked: (60−50)×20 = 200). Mechanical-accretion warning fires on an
+  all-stock, zero-synergy P/E-arbitrage deal that is +Y1 accretive.
+- MC point mass == deterministic engine to 1e-9; same seed → identical
+  arrays. Toy deal: P(Y2 accretive) = 100%, Y1 P5 −3.7% / P95 +0.0%.
+- Phase 2 known-deal suite still 7/7.
 
 ### Phase 2 completed
 - `src/deal.py` — `DealTerms` dataclass (validates pct_cash+pct_stock=100);

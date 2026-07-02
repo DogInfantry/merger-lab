@@ -56,6 +56,7 @@ class ADResult:
     heuristic_note: str
     su: SourcesUses = None
     ppa: PPAResult = None
+    owned_frac: float = 1.0
 
     @property
     def year1_accretion_pct(self) -> float:
@@ -124,7 +125,7 @@ def run_accretion_dilution(
 
     return ADResult(years=years, breakeven_synergies_cr=breakeven,
                     heuristic_accretive=heuristic_accretive, heuristic_note=note,
-                    su=su, ppa=ppa)
+                    su=su, ppa=ppa, owned_frac=owned_frac)
 
 
 def run_deal(
