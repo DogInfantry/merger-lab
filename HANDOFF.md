@@ -1,6 +1,47 @@
 # HANDOFF — living state doc
 
-## Current status: Phase 1 COMPLETE (2026-07-02) — awaiting AR review
+## Current status: Phase 2 COMPLETE (2026-07-02) — awaiting AR review
+
+### Phase 2 completed
+- `src/deal.py` — `DealTerms` dataclass (validates pct_cash+pct_stock=100);
+  `CompanyFinancials` imported from data_layer, not redefined.
+- `src/sources_uses.py` — S&U with open-offer cost as an extra Use; stock
+  applies to negotiated consideration only, open offer is cash-settled;
+  `pct_new_debt_of_cash_portion` applies to TOTAL cash needs (consideration
+  + open offer + refinance + fees). Balance asserted to the rupee.
+- `src/rbi_compliance.py` — 5 checks (75% debt cap, 25% equity, 3.0x pro-forma
+  D/E, ₹500 Cr net worth, attested profitability) with value/threshold/status/
+  explanation each; report goes verbatim into memo later.
+- `src/sebi_sast.py` — 25% trigger → 26% open offer at offer price (floor-price
+  simplification documented), 0/50/100% acceptance scenarios, MPS >75% breach
+  flag, creeping-acquisition note, CCI ₹2,000 Cr deal-value flag.
+- `src/ppa.py` — write-up on excess over owned book, DTL at tax rate, goodwill,
+  straight-line incremental D&A.
+- `src/accretion_dilution.py` — Y1–3 engine per spec formula; analytic
+  break-even synergies; earnings-yield vs financing-cost heuristic cross-check
+  with disagreement flag. `run_deal()` wrapper = S&U → PPA → A/D in one call.
+- `src/contribution.py` — revenue/EBITDA/NI contribution vs pro-forma
+  ownership, >10pt divergence flag.
+- `src/sensitivity.py` — premium×synergies and cash×premium grids; each cell
+  re-runs the full engine (no shortcut algebra).
+- `tests/test_known_deal.py` — toy deal "Project Anchor", every expected value
+  hand-derived in comments; 7 tests, all pass to 0.1%.
+
+### Phase 2 verification results (all pass)
+- `python tests/test_known_deal.py` → 7/7 PASS: S&U balances (1,218 Cr),
+  PPA (goodwill 490 Cr, D&A 28 Cr), A/D Y1 −0.83% / Y2 +2.93% / Y3 +4.03%,
+  break-even synergies 68.80 Cr (re-running at break-even → 0.000% Y1),
+  sanity law (9% debt accretive / 14% debt dilutive vs 10% target yield),
+  RBI fails 90%-debt deal, SAST 51% triggers offer + 77% holding breaches
+  MPS + 312 Cr offer cost flows into Uses, contribution ties by hand.
+- Sensitivity grids: 9×9 and 11×9, monotonic in premium and synergies.
+
+### Phase 2 modeling decisions
+- Partial-stake deals consolidate owned% of target NI (economic view, no
+  minority-interest line) — documented in accretion_dilution methodology.
+- Open offer consideration is cash-only (SAST offers modeled as cash).
+- Standalone acquirer EPS held flat Y1–3 (isolates deal effects).
+- Heuristic disagreement is a flag with reconciling-items note, not an error.
 
 ### Completed
 - Directory scaffold per spec; `requirements.txt` (WeasyPrint excluded on

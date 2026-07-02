@@ -24,10 +24,14 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   24h JSON cache, INR-crore normalization), `src/precedent_db.py` (SQLite,
   raw-SQL window-function queries), `data/seeds/precedent_deals_seed.csv`
   (37 real India deals 2019–2025, numbers marked ILLUSTRATIVE).
-- **Phase 2 (next):** deal.py, sources_uses.py, rbi_compliance.py, sebi_sast.py,
-  contribution.py, ppa.py, accretion_dilution.py, sensitivity.py, known-deal test.
-- Phases 3–6: optimizer/MC/value bridge → collar/merger arb → memo+Excel
-  generators → Streamlit + samples + Vercel landing page + README.
+- **Phase 2 (DONE):** deal.py, sources_uses.py (balance asserted), rbi_compliance.py
+  (5 checks), sebi_sast.py (open offer + MPS + CCI), ppa.py, accretion_dilution.py
+  (Y1–3 + break-even + heuristic cross-check), contribution.py, sensitivity.py,
+  tests/test_known_deal.py (7/7, hand-derived arithmetic in comments).
+- **Phase 3 (next):** optimizer.py (SLSQP/DE, RBI constraints), monte_carlo.py
+  (10k iters, seeded rng 42), value_bridge.py (synergy PV vs premium, ROIC vs WACC).
+- Phases 4–6: collar/merger arb → memo+Excel generators → Streamlit + samples +
+  Vercel landing page + README.
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`
