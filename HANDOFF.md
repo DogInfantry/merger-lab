@@ -1,6 +1,36 @@
 # HANDOFF — living state doc
 
-## Current status: Phase 3 COMPLETE (2026-07-02) — awaiting AR review
+## Current status: Phase 4 COMPLETE (2026-07-02) — awaiting AR review
+
+### Phase 4 completed
+- `src/collar.py` — Black-Scholes call/put (math.erf, no scipy dependency;
+  σ=0 or T=0 branch returns discounted intrinsic exactly). Collar decomposed
+  as: target long put at floor, short call at cap; value per target share
+  = R × (P(floor) − C(cap)). Payoff DataFrame (fixed-ratio vs collared =
+  R × clip(S, floor, cap)) for the memo chart. Plain-English explanation
+  paragraph generated. `annualized_vol()` (pure) + `realized_vol_yf()`
+  (yfinance daily log returns × √252). No-dividend simplification documented.
+- `src/merger_arb.py` — implied close probability
+  p = (P×(1+r)^t − D)/(O − D), annualized return if close, gross spread;
+  p outside [0,1] flagged in narrative (bump expected / downside too high),
+  not clamped.
+- `tests/test_derivatives.py` — 7 tests.
+
+### Phase 4 verification results (all pass)
+- BS matches textbook hand-check (S=K=100, r=5%, σ=20%, T=1 → call 10.4506,
+  put 5.5735, derivation in comments); put-call parity to 1e-9 across cases.
+- Zero-vol collar → intrinsic only (0 inside the band).
+- Collar payoff identity: collared value = R × clip(S, floor, cap); below
+  floor the collared value strictly exceeds fixed-ratio value.
+- Arb: offer = price at r=0 → p = 100% exactly; with 7% carry p = 1.172
+  (= 1 + carry/(O−D)) and the "sweetened offer" flag fires. Hand example
+  (95/100/80, 6m) → p = 0.75, annualized 10.8%.
+- Live: RELIANCE.NS realized vol 20.1% (sane vs India VIX mid-teens–20s).
+- Full regression: 7 known-deal + 6 quant-layer still pass.
+
+### Phase 4 notes
+- One test bound fixed during dev (carry effect on implied p is amplified by
+  narrow O−D spread — module was right, initial test bound was wrong).
 
 ### Phase 3 completed
 - `src/optimizer.py` — SLSQP multistart over (pct_cash, pct_debt_of_cash);

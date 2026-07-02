@@ -32,10 +32,12 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   binding-constraint narrative), monte_carlo.py (10k iters, rng(42), point-mass
   == engine asserted), value_bridge.py (synergy PV vs premium, ROIC vs WACC,
   mechanical-accretion warning). tests/test_quant_layer.py 6/6.
-- **Phase 4 (next):** collar.py (Black-Scholes put−call decomposition, yfinance
-  realized vol), merger_arb.py (implied close probability).
-- Phases 5–6: memo+Excel generators → Streamlit + samples + Vercel landing
-  page + README.
+- **Phase 4 (DONE):** collar.py (BS via math.erf, put−call collar decomposition,
+  payoff grid, annualized_vol + realized_vol_yf), merger_arb.py (implied close
+  probability, out-of-bounds flagged not clamped). tests/test_derivatives.py 7/7.
+- **Phase 5 (next):** memo_generator.py + templates/ic_memo.html (WeasyPrint,
+  fpdf2 fallback on Windows), excel_generator.py (openpyxl, live formulas).
+- Phase 6: Streamlit + samples + Vercel landing page + README.
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`
