@@ -47,10 +47,15 @@
   Space repo: https://huggingface.co/spaces/DogInfantry/merger-lab —
   it is a SEPARATE repo from GitHub, staged from scratchpad with its own
   frontmatter README. To redeploy after code changes:
-  copy app/ src/ data/seeds/ requirements.txt packages.txt .streamlit/ into a
-  staging dir with the Space's Dockerfile+README, then
-  `hf upload DogInfantry/merger-lab <dir> . --type space`.
-  (hf.exe lives at %APPDATA%\Python\Python314\Scripts\, authed DogInfantry.)
+  **redeploys automatically**: `.github/workflows/sync-space.yml` stages the
+  Space layout (code + `.hf/Dockerfile` + `.hf/SPACE_README.md`, both now
+  version-controlled) and hf-uploads on every push to main touching
+  app/src/data/config. Uses repo secret `HF_TOKEN`; runs under GitHub
+  environment "huggingface-space" so deployments appear on the repo page.
+  (Gotcha: piping a token into `gh secret set` from PowerShell adds a UTF-16
+  BOM that corrupts the secret — pass it via `--body` instead.)
+  Manual fallback: hf.exe at %APPDATA%\Python\Python314\Scripts\, authed
+  DogInfantry.
 - site/index.html CTA + README now point at the live app.
 - Space verified: stage RUNNING, HTTP 200, clean run logs.
 
