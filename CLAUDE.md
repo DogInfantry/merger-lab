@@ -44,8 +44,87 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   download buttons), generate_samples.py (3 live-data sample deal rooms incl.
   honest DECLINEs), site/index.html (Vercel landing, STREAMLIT_APP_URL
   placeholder), README.md. USD-filer FX inference added to data_layer
-  (Infosys 20-F bug). 28/28 tests. Remaining: AR deploys (Streamlit Cloud +
-  Vercel), sets URLs, pushes to GitHub.
+  (Infosys 20-F bug). 28/28 tests.
+- **SHIPPED (2026-07-03):** public GitHub repo
+  https://github.com/DogInfantry/merger-lab; live HF Docker Space
+  https://doginfantry-merger-lab.hf.space. CI `.github/workflows/sync-space.yml`
+  auto-deploys to the Space on every push to `main` touching app/src/data/config.
+
+## Post-ship maintenance (this session, 2026-07-03)
+Two bugs/features shipped via PR → squash-merge → auto-deploy (all green, 28/28):
+- **PR #1 (fix):** SQLite cross-thread crash. `get_connection()` opened SQLite
+  with default `check_same_thread=True`; the app caches ONE connection across
+  Streamlit reruns (which run on new threads) via `@st.cache_resource`. The
+  connection is only queried when a sector is picked (deal_package.py:171
+  `if precedent_conn is not None and sector:`) — so "—" worked but selecting a
+  sector → `sqlite3.ProgrammingError` → whole app died. Fix: `check_same_thread
+  =False` in `get_connection()` (read-only after one-time load_seed, so safe).
+- **PR #2 (feat):** optional Screener.in CSV upload as yfinance fallback. Wired
+  the already-built (but never-called) `load_screener_csv()` + `merge_financials()`
+  into the app: two per-company `st.file_uploader`s in the sidebar form + a new
+  module-level `_resolve(ticker, screener_file)` helper. Screener fundamentals
+  override yfinance; price/shares still come from yfinance. Fixes app dead-ending
+  when Yahoo data is stale/wrong.
+
+## Active / next task: precedent-DB verification
+The 37 deals in `data/seeds/precedent_deals_seed.csv` are ALL marked
+`ILLUSTRATIVE — verify` (fabricated numbers, generic source URLs). This is the
+un-overlappable credibility moat. Next: take the big, well-documented deals
+(HDFC-HDFC Bank merger, L&T-Mindtree, PVR-INOX, Adani-Ambuja/ACC) and replace
+the illustrative premium/deal-value/multiple numbers with figures verified from
+public SEBI/BSE filings + real source_url; leave the rest honestly flagged.
+Rule #3 stands: no fabricated numbers — unverifiable stays ILLUSTRATIVE. Agent
+CAN fetch public filings during dev (that is research, not the forbidden
+runtime scraping).
+
+## File map
+Engine (pure Python, INR crore, each has a `methodology` docstring + `__main__` self-check):
+- `src/data_layer.py` — `CompanyFinancials` dataclass; `fetch_company()` (yfinance,
+  24h JSON cache in `data/cache/`, `_statement_fx()` USD-filer inference),
+  `load_screener_csv()`, `merge_financials()`.
+- `src/precedent_db.py` — SQLite schema + `load_seed()` + 4 raw-SQL analysis queries.
+- `src/deal.py` — `DealTerms`. `src/sources_uses.py` — `build_sources_uses` (balances).
+- `src/ppa.py` — purchase-price accounting. `src/rbi_compliance.py` — 5 RBI checks.
+- `src/sebi_sast.py` — open offer / MPS / creeping / CCI. `src/accretion_dilution.py`
+  — `run_deal()` wrapper + Y1–3 engine + break-even. `src/contribution.py`,
+  `src/sensitivity.py`.
+- `src/optimizer.py` (SLSQP), `src/monte_carlo.py` (rng 42), `src/value_bridge.py`.
+- `src/collar.py` (Black-Scholes), `src/merger_arb.py`.
+- `src/deal_package.py` — **orchestrator**: `build_deal_package()` returns the frozen
+  `DealPackage` both generators consume; holds the PROCEED/CONDITIONS/DECLINE rules.
+- `src/memo_generator.py` + `src/templates/ic_memo.html` — PDF memo (inline-SVG charts).
+- `src/excel_generator.py` — 10-tab openpyxl model, live formulas + Δ-vs-engine column.
+
+App / ship:
+- `app/streamlit_app.py` — wrapper UI; `_resolve(ticker, screener_file)` picks
+  yfinance vs merged Screener data. `.streamlit/config.toml` (navy/gold theme).
+- `generate_samples.py` (repo root) — rebuilds `samples/` + `site/assets/` +
+  `docs/memo_preview.png` from live data.
+- `site/index.html` — Vercel landing page. `vercel.json` — `outputDirectory: site`.
+- `.hf/Dockerfile` + `.hf/SPACE_README.md` — HF Space build (python:3.12-slim + pango).
+- `.github/workflows/sync-space.yml` — auto-deploy to HF Space on push to `main`.
+
+Tests (all pass; run `python tests/<file>.py`, no pytest needed): `test_known_deal.py`
+(7, the sacred anchor), `test_quant_layer.py` (6), `test_derivatives.py` (7),
+`test_generators.py` (5), `test_data_layer.py` (3) = **28 total**.
+
+## Gotchas
+- **yfinance USD filers:** Infosys/Wipro (20-F) return statements in USD while
+  price/EPS are INR → naive read gives −1000%+ accretion. `_statement_fx()` handles
+  it; if you add companies, sanity-check accretion isn't wildly off.
+- **SQLite + Streamlit threads:** `get_connection()` uses `check_same_thread=False`
+  because the app shares one cached connection across reruns (new threads). Safe only
+  because usage is read-only after `load_seed()`. Don't add writes on that connection.
+- **`gh secret set` from PowerShell:** piping a token in adds a UTF-16 BOM that
+  corrupts the secret. Pass via `--body` instead.
+- **PDF engine differs by OS:** headless Edge/Chrome on Windows (no page numbers),
+  WeasyPrint on Linux/HF Space (has page numbers). Both go through `html_to_pdf()`.
+- **HF Space is a separate git repo** from GitHub (its own Dockerfile + frontmatter
+  README under `.hf/`). CI syncs it; manual redeploy = `hf upload DogInfantry/merger-lab`.
+- **`hf.exe` not on PATH:** it lives at `%APPDATA%\Python\Python314\Scripts\hf.exe`.
+- **`streamlit` not on PATH:** run via `python -m streamlit run app/streamlit_app.py`.
+- Python 3.14 local; Space uses 3.12. p75 premium is NaN for sectors with <4 deals
+  (expected — NTILE(4) on thin data, not a bug).
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`
@@ -53,4 +132,5 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   `python src/<module>.py`.
 - Precedent DB rebuilt via `precedent_db.load_seed()`; queries return DataFrames
   but keep SQL in readable multi-line strings (portfolio signal).
-- See HANDOFF.md for current state and decisions.
+- Ship changes via PR → squash-merge to `main` → CI auto-deploys to HF Space.
+- See HANDOFF.md for full phase-by-phase state and decisions.
