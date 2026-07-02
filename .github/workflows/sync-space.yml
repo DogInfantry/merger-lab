@@ -1,0 +1,45 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "src/**"
+      - "data/seeds/**"
+      - "requirements.txt"
+      - "packages.txt"
+      - ".streamlit/**"
+      - ".hf/**"
+      - ".github/workflows/sync-space.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: huggingface-space
+      url: https://doginfantry-merger-lab.hf.space
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install huggingface_hub
+
+      - name: Stage Space layout
+        run: |
+          mkdir -p space
+          cp -r app src data requirements.txt packages.txt .streamlit space/
+          rm -rf space/src/__pycache__ space/data/cache space/data/screener_uploads
+          cp .hf/Dockerfile space/Dockerfile
+          cp .hf/SPACE_README.md space/README.md
+
+      - name: Upload to Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: >
+          hf upload DogInfantry/merger-lab space . --type space
+          --commit-message "Sync from GitHub ${GITHUB_SHA::7}"
