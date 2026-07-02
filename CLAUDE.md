@@ -40,8 +40,12 @@ These guardrails appear in the engine, optimizer, memo, Excel, and README.
   PDF on Windows / WeasyPrint elsewhere), excel_generator.py (10 tabs, live
   cross-referenced formulas, Δ-vs-engine tie-out column).
   tests/test_generators.py 5/5; 25 tests total green.
-- **Phase 6 (next):** app/streamlit_app.py, samples/ (2–3 large-cap demo
-  deals), site/index.html (Vercel landing), README.md.
+- **Phase 6 (DONE):** app/streamlit_app.py (form → RBI badges → results →
+  download buttons), generate_samples.py (3 live-data sample deal rooms incl.
+  honest DECLINEs), site/index.html (Vercel landing, STREAMLIT_APP_URL
+  placeholder), README.md. USD-filer FX inference added to data_layer
+  (Infosys 20-F bug). 28/28 tests. Remaining: AR deploys (Streamlit Cloud +
+  Vercel), sets URLs, pushes to GitHub.
 
 ## Conventions
 - `CompanyFinancials` lives in `src/data_layer.py`; monetary fields `*_cr`

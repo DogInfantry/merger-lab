@@ -1,6 +1,45 @@
 # HANDOFF — living state doc
 
-## Current status: Phase 5 COMPLETE (2026-07-02) — awaiting AR review
+## Current status: Phase 6 COMPLETE (2026-07-02) — ALL PHASES DONE, awaiting AR ship review
+
+### Phase 6 completed
+- `app/streamlit_app.py` — sidebar form (tickers, premium, stake, mix, rates,
+  synergies, acceptance, WACC, attestation) → RBI PASS/FAIL badge panel →
+  A/D + contribution + MC histogram + collar payoff + heat sensitivity tabs →
+  two primary download buttons (memo PDF, Excel). Nothing computed in the app
+  itself — it wraps build_deal_package(). Dark navy/gold theme in
+  `.streamlit/config.toml`; `packages.txt` carries WeasyPrint's apt deps for
+  Streamlit Cloud (Linux).
+- `generate_samples.py` (repo root) — regenerates all three sample deal rooms
+  from live yfinance data, refreshes `site/assets/`, captures
+  `docs/memo_preview.png` via headless Edge for the README.
+- `samples/` — Project Horizon (INFY→PERSISTENT, 60% stock, DECLINE −23.8%),
+  Project Bastion (ULTRACEMCO→JKCEMENT, 64% block + open offer, DECLINE),
+  Project Meridian (HINDALCO→NATIONALUM, 51%+offer, 100% cash, PROCEED WITH
+  CONDITIONS +2.15% Y1, P(Y2) 100%). All labeled ILLUSTRATIVE.
+- `site/index.html` — single-file Vercel landing page: embedded hero memo PDF,
+  three sample cards with verdict tags, "Run your own deal" CTA
+  (STREAMLIT_APP_URL placeholder), 8 methodology stat boxes, disclaimer footer.
+- `README.md` — spec order: memo screenshot first, RBI thesis, deliverables,
+  sample table, module map, zero-paid-APIs, methodology, how-to-run,
+  limitations, roadmap.
+
+### Phase 6 bug found & fixed (important)
+- **USD-filer currency mismatch:** yfinance returns Infosys statements in USD
+  (20-F) while price/EPS are INR → first sample run produced Y1 −1215%.
+  Fix: `_statement_fx()` in data_layer infers the FX factor from
+  trailingEps × shares vs netIncomeToCommon (≈ USDINR 92.2 live), applied to
+  all statement-scope fields, only when Yahoo declares differing currencies
+  and the factor lands in a plausible 10–150 band. Poisoned cache cleared.
+  3 new offline tests in tests/test_data_layer.py.
+
+### Phase 6 verification
+- 28/28 tests green (known-deal 7, quant 6, derivatives 7, generators 5,
+  data-layer 3); app compiles; headless Streamlit served HTTP 200 locally.
+- Sample generation script runs end-to-end from repo root (live data).
+- NOT yet done (needs AR): Streamlit Cloud deploy + download-button click
+  test in browser; set STREAMLIT_APP_URL + GitHub URL in site/index.html;
+  `vercel site/` deploy; mobile render check; push repo to GitHub.
 
 ### Phase 5 completed
 - `src/deal_package.py` (new orchestrator, not in spec file list — justified:

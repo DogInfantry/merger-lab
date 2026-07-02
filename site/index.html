@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MERGER LAB — India M&A Deal Room</title>
+<meta name="description" content="M&A accretion/dilution engine for Indian public markets. IC memo + linked Excel model outputs. RBI 2026 acquisition-finance framework built in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#070B14; --panel:#0D1420; --line:#1C2536; --gold:#C9A84C; --txt:#E8EAEE; --mut:#8A93A5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--navy); color: var(--txt); font-family: "IBM Plex Sans", sans-serif; line-height: 1.55; }
+  a { color: var(--gold); text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
+  header { padding: 64px 0 40px; border-bottom: 1px solid var(--line); }
+  .tag { color: var(--gold); letter-spacing: 4px; font-size: 12px; }
+  h1 { font-family: "IBM Plex Serif", serif; font-size: clamp(34px, 6vw, 54px); margin: 10px 0; }
+  .thesis { color: var(--mut); max-width: 780px; font-size: 17px; }
+  .thesis b { color: var(--txt); }
+  .hero-pdf { margin: 36px 0 8px; border: 1px solid var(--line); background: var(--panel); }
+  .hero-pdf iframe, .hero-pdf object { width: 100%; height: 72vh; border: 0; display: block; }
+  .hero-cap { font-size: 12px; color: var(--mut); padding: 10px 2px 40px; }
+  section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-family: "IBM Plex Serif", serif; font-size: 26px; margin-bottom: 22px; }
+  h2 .n { color: var(--gold); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); padding: 22px; }
+  .card h3 { font-size: 17px; margin-bottom: 4px; }
+  .card .verdict { font-size: 11px; letter-spacing: 1.5px; }
+  .v-p { color: #4ade80; } .v-c { color: var(--gold); } .v-d { color: #f87171; }
+  .card p { color: var(--mut); font-size: 13.5px; margin: 8px 0 14px; }
+  .dl { display: inline-block; border: 1px solid var(--gold); padding: 7px 14px; font-size: 13px; margin: 0 8px 8px 0; }
+  .dl:hover { background: var(--gold); color: var(--navy); }
+  .cta { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 600;
+         padding: 14px 30px; font-size: 16px; }
+  .cta:hover { filter: brightness(1.1); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .stat { border: 1px solid var(--line); background: var(--panel); padding: 18px; }
+  .stat .k { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+  .stat .d { color: var(--mut); font-size: 13px; margin-top: 6px; }
+  footer { padding: 36px 0 60px; color: var(--mut); font-size: 12.5px; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="tag mono">MERGER LAB · DEAL ROOM</div>
+  <h1>Build the model.<br>Ship the IC memo.</h1>
+  <p class="thesis">
+    RBI's acquisition-finance liberalization (effective <b>1 April 2026</b>) lets Indian banks fund
+    up to <b>75% of acquisition value</b> for the first time — a structural M&amp;A wave in the making.
+    MERGER LAB structures a live deal between listed Indian companies inside the RBI guardrails and
+    SEBI's Takeover Code, then produces the two artifacts that matter:
+    an <b>investment-committee memo</b> and a <b>linked Excel model</b>.
+  </p>
+</header>
+
+<div class="wrap">
+  <div class="hero-pdf">
+    <object data="assets/project_horizon_ic_memo.pdf" type="application/pdf">
+      <p style="padding:30px">PDF viewer unavailable —
+        <a href="assets/project_horizon_ic_memo.pdf">open the sample IC memo</a>.</p>
+    </object>
+  </div>
+  <div class="hero-cap mono">SAMPLE: PROJECT HORIZON — the engine recommends DECLINE; honest models say no. ILLUSTRATIVE, public data.</div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span> · Sample deal rooms</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="verdict mono v-d">DECLINE</div>
+        <h3>Project Horizon</h3>
+        <p>Large-cap IT acquires a digital-engineering mid-cap. 60% stock — collar priced,
+           contribution vs ownership flagged, mechanical-dilution mathematics laid bare.</p>
+        <a class="dl" href="assets/project_horizon_ic_memo.pdf">IC memo (PDF)</a>
+        <a class="dl" href="assets/project_horizon_model.xlsx">Excel model</a>
+      </div>
+      <div class="card">
+        <div class="verdict mono v-d">DECLINE</div>
+        <h3>Project Bastion</h3>
+        <p>Cement consolidation via 64% promoter block — mandatory 26% open offer, MPS breach
+           scenarios, CCI threshold, RBI debt-cap analysis at full acceptance.</p>
+        <a class="dl" href="assets/project_bastion_ic_memo.pdf">IC memo (PDF)</a>
+        <a class="dl" href="assets/project_bastion_model.xlsx">Excel model</a>
+      </div>
+      <div class="card">
+        <div class="verdict mono v-c">PROCEED WITH CONDITIONS</div>
+        <h3>Project Meridian</h3>
+        <p>Low-multiple metals target, 51% + open offer, 100% cash within RBI guardrails —
+           accretive Year 1 with a positive value bridge and a flagged MPS obligation.</p>
+        <a class="dl" href="assets/project_meridian_ic_memo.pdf">IC memo (PDF)</a>
+        <a class="dl" href="assets/project_meridian_model.xlsx">Excel model</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span> · Run your own deal</h2>
+    <p style="color:var(--mut); max-width:640px; margin-bottom:24px">
+      Pick any listed acquirer and target, set the consideration mix, and get a live RBI
+      compliance panel, the full quant stack, and both deliverables to download.
+    </p>
+    <a class="cta" href="STREAMLIT_APP_URL">Open the deal room →</a>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span> · Under the hood</h2>
+    <div class="stats">
+      <div class="stat"><div class="k mono">RBI 2026 GUARDRAILS</div>
+        <div class="d">75% bank-debt cap · 25% equity floor · 3:1 consolidated D/E · ₹500 Cr net worth — PASS/FAIL panel wired through engine, optimizer, memo and Excel.</div></div>
+      <div class="stat"><div class="k mono">SEBI SAST ENGINE</div>
+        <div class="d">25% trigger → 26% mandatory open offer, acceptance scenarios in Sources &amp; Uses, MPS breach and creeping-acquisition flags, CCI deal-value test.</div></div>
+      <div class="stat"><div class="k mono">SLSQP OPTIMIZER</div>
+        <div class="d">Financing mix that maximizes Year-1 accretion against the real engine — with the binding constraint named in the memo.</div></div>
+      <div class="stat"><div class="k mono">MONTE CARLO ×10,000</div>
+        <div class="d">Seeded, reproducible; triangular synergies, lognormal integration costs, phase-in delay. P(accretive by Y2) with P5/P95 bands.</div></div>
+      <div class="stat"><div class="k mono">BLACK-SCHOLES COLLAR</div>
+        <div class="d">Exchange-ratio collar = long put at floor, short call at cap; priced off realized vol, payoff chart in the memo.</div></div>
+      <div class="stat"><div class="k mono">VALUE BRIDGE</div>
+        <div class="d">Synergy PV vs control premium and ROIC vs WACC — flags deals that are accretive but value-destructive.</div></div>
+      <div class="stat"><div class="k mono">PRECEDENT SQL DB</div>
+        <div class="d">37 India deals 2019–2025; window-function premium percentiles and CTE comps straight into the memo.</div></div>
+      <div class="stat"><div class="k mono">28 HAND-CHECKED TESTS</div>
+        <div class="d">A fully hand-derived known-deal test anchors every formula; sanity laws for cash deals, value bridges and zero-vol collars.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="https://github.com/DogInfantry/merger-lab" class="mono">github.com/DogInfantry/merger-lab</a><br><br>
+    Illustrative analysis built on public data (yfinance, exchange filings, SEBI letters of offer).
+    Sample transactions are hypothetical; precedent entries marked ILLUSTRATIVE are unverified.
+    Not investment advice. RBI/SEBI parameters should be verified against the master directions.<br><br>
+    <span class="mono">MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE</span>
+  </div>
+</footer>
+</body>
+</html>

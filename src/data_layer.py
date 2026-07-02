@@ -99,6 +99,33 @@ def _write_cache(ticker: str, data: dict) -> None:
     )
 
 
+def _statement_fx(info: dict) -> float:
+    """Multiplier converting statement-currency values to the price currency.
+
+    USD-filing Indian companies (Infosys, Wipro 20-F filers) return Yahoo
+    financials in USD while price/EPS/market cap are INR. Rather than
+    fabricate an FX rate, infer it from internally consistent fields:
+    trailingEps x sharesOutstanding (price currency) vs netIncomeToCommon
+    (statement currency). Factor ~= USDINR for USD filers, 1.0 otherwise.
+    Applied only when Yahoo declares differing currencies AND the implied
+    factor is in a plausible FX band (10-150), else 1.0 with a warning.
+    """
+    fin_cur, px_cur = info.get("financialCurrency"), info.get("currency")
+    if not fin_cur or not px_cur or fin_cur == px_cur:
+        return 1.0
+    eps, shares, ni = (info.get("trailingEps"), info.get("sharesOutstanding"),
+                       info.get("netIncomeToCommon"))
+    if eps and shares and ni:
+        implied = eps * shares / ni
+        if 10 < abs(implied) < 150:
+            log.warning("statements in %s, price in %s: scaling by implied FX %.2f",
+                        fin_cur, px_cur, implied)
+            return implied
+    log.warning("statement/price currency mismatch (%s/%s) but FX could not be "
+                "inferred — statement fields left unscaled", fin_cur, px_cur)
+    return 1.0
+
+
 def fetch_company(ticker: str, use_cache: bool = True) -> CompanyFinancials:
     """Fetch a listed Indian company via yfinance (.NS/.BO suffix expected).
 
@@ -117,6 +144,7 @@ def fetch_company(ticker: str, use_cache: bool = True) -> CompanyFinancials:
 
     price = info.get("currentPrice") or info.get("regularMarketPrice")
     shares = info.get("sharesOutstanding")
+    fx = _statement_fx(info)
 
     tax_rate = INDIA_DEFAULT_TAX_RATE
     pretax = _stmt_value(income, "Pretax Income")
@@ -128,8 +156,12 @@ def fetch_company(ticker: str, use_cache: bool = True) -> CompanyFinancials:
 
     interest = _stmt_value(income, "Interest Expense")
 
-    total_debt_cr = _cr(info.get("totalDebt"))
-    cash_cr = _cr(info.get("totalCash"))
+    def _cr_fx(value):  # statement-currency raw value -> INR crore
+        v = _cr(value)
+        return v * fx if v is not None else None
+
+    total_debt_cr = _cr_fx(info.get("totalDebt"))
+    cash_cr = _cr_fx(info.get("totalCash"))
     net_debt_cr = (
         total_debt_cr - cash_cr
         if total_debt_cr is not None and cash_cr is not None
@@ -138,7 +170,7 @@ def fetch_company(ticker: str, use_cache: bool = True) -> CompanyFinancials:
 
     book_value_cr = None
     if info.get("bookValue") is not None and shares:
-        book_value_cr = _cr(info["bookValue"] * shares)
+        book_value_cr = _cr(info["bookValue"] * shares) * fx
 
     company = CompanyFinancials(
         ticker=ticker,
@@ -148,13 +180,13 @@ def fetch_company(ticker: str, use_cache: bool = True) -> CompanyFinancials:
         market_cap_cr=_cr(info.get("marketCap")),
         diluted_eps_ttm=info.get("trailingEps"),
         pe=info.get("trailingPE"),
-        net_income_cr=_cr(info.get("netIncomeToCommon")),
-        revenue_cr=_cr(info.get("totalRevenue")),
-        ebitda_cr=_cr(info.get("ebitda")),
+        net_income_cr=_cr_fx(info.get("netIncomeToCommon")),
+        revenue_cr=_cr_fx(info.get("totalRevenue")),
+        ebitda_cr=_cr_fx(info.get("ebitda")),
         total_debt_cr=total_debt_cr,
         cash_cr=cash_cr,
         net_debt_cr=net_debt_cr,
-        interest_expense_cr=_cr(interest),
+        interest_expense_cr=_cr_fx(interest),
         book_value_cr=book_value_cr,
         tax_rate=tax_rate,
         source="yfinance",
