@@ -37,9 +37,27 @@
 - 28/28 tests green (known-deal 7, quant 6, derivatives 7, generators 5,
   data-layer 3); app compiles; headless Streamlit served HTTP 200 locally.
 - Sample generation script runs end-to-end from repo root (live data).
-- NOT yet done (needs AR): Streamlit Cloud deploy + download-button click
-  test in browser; set STREAMLIT_APP_URL + GitHub URL in site/index.html;
-  `vercel site/` deploy; mobile render check; push repo to GitHub.
+### Shipped (2026-07-03)
+- **GitHub:** https://github.com/DogInfantry/merger-lab (public, main branch,
+  description + 10 topics set via gh CLI).
+- **Live app:** https://doginfantry-merger-lab.hf.space — deployed as a
+  **Hugging Face Docker Space** (HF no longer offers a native Streamlit SDK
+  for new Spaces; Dockerfile = python:3.12-slim + pango libs for WeasyPrint,
+  non-root uid-1000 user so the yfinance cache is writable, port 7860).
+  Space repo: https://huggingface.co/spaces/DogInfantry/merger-lab —
+  it is a SEPARATE repo from GitHub, staged from scratchpad with its own
+  frontmatter README. To redeploy after code changes:
+  copy app/ src/ data/seeds/ requirements.txt packages.txt .streamlit/ into a
+  staging dir with the Space's Dockerfile+README, then
+  `hf upload DogInfantry/merger-lab <dir> . --type space`.
+  (hf.exe lives at %APPDATA%\Python\Python314\Scripts\, authed DogInfantry.)
+- site/index.html CTA + README now point at the live app.
+- Space verified: stage RUNNING, HTTP 200, clean run logs.
+
+### Still needs AR (browser/manual)
+- Open the live app, run a deal, click both download buttons.
+- `vercel site/` deploy + mobile render check.
+- Open a sample memo PDF + Excel recalc check (from Phase 5 list).
 
 ### Phase 5 completed
 - `src/deal_package.py` (new orchestrator, not in spec file list — justified:

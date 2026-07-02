@@ -2,6 +2,9 @@
 
 **An M&A accretion/dilution engine for Indian public markets — build the model, ship the IC memo.**
 
+**Live deal room:** [doginfantry-merger-lab.hf.space](https://doginfantry-merger-lab.hf.space) ·
+[Hugging Face Space](https://huggingface.co/spaces/DogInfantry/merger-lab)
+
 ![Sample IC memo — Project Horizon](docs/memo_preview.png)
 
 ## Why now
