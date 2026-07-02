@@ -93,7 +93,7 @@ parameters against the master directions before relying on any output.
 - Regulatory WACC helper (CAPM with India ERP input) and target-price DCF cross-check
 - Deal-financing term sheet exhibit (tenor/amortization schedule vs RBI ongoing D/E test)
 - Hindi-language memo variant
-<iframe src="https://github.com/sponsors/DogInfantry/card" title="Sponsor DogInfantry" height="225" width="600" style="border: 0;"></iframe>
+
 ---
 *MERGER LAB · DogInfantry · repo: M&A accretion/dilution engine for India — IC memo + Excel model
 outputs. RBI 2026 acquisition-finance framework built in.*
