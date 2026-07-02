@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+data/cache/
+data/precedent_deals.db
+.streamlit/secrets.toml
