@@ -66,7 +66,7 @@ Two bugs/features shipped via PR → squash-merge → auto-deploy (all green, 28
   override yfinance; price/shares still come from yfinance. Fixes app dead-ending
   when Yahoo data is stale/wrong.
 
-## Active / next task: precedent-DB verification (IN PROGRESS — 20/37 verified, 17 ILLUSTRATIVE)
+## Active / next task: precedent-DB verification (20/37 verified) + provenance SURFACED (SHIPPED)
 The 37 deals in `data/seeds/precedent_deals_seed.csv` started ALL marked
 `ILLUSTRATIVE — verify` (fabricated numbers, generic source URLs). This is the
 un-overlappable credibility moat. Rule #3 stands: no fabricated numbers —
@@ -88,7 +88,7 @@ unverifiable premiums are BLANKED (honest-blank beats fake).
 - **PR #5 (MERGED — commit 8ade52e):** 3 tier-3 — JSW Steel-Bhushan
   Power (**stale-data fix: SC declared IBC plan illegal + ordered liquidation May 2025**),
   Mankind-BSV (date →2024-07-25), SMBC-Yes Bank 20% (date →2025-05-09; status →completed).
-- **PR #6 (this branch `data/verify-tier4-precedents`):** 6 tier-4 listed targets —
+- **PR #6 (MERGED — commit d4989d2):** 6 tier-4 listed targets —
   Bandhan-Gruh (swap 568:1000; blanked fake -7% premium + 45 P/E), Reliance-Just Dial
   (open offer Rs 1022.25 = 4.76% **discount** not +10% premium; blanked), Proximus-Route
   Mobile (57.56% at Rs 1626.40; blanked P/E), UltraTech-Kesoram (swap 1:52; premium set
@@ -102,10 +102,23 @@ unverifiable premiums are BLANKED (honest-blank beats fake).
   Sony-Zee + Aster-QCIL withdrawn/announced). Remaining verifiable listed-target
   candidates thin out here — Vedanta delisting (withdrawn), AU-Fincare (swap 579:2000),
   Ambuja-Sanghi, Adani-NDTV, Shriram merger. Diminishing returns; verify opportunistically.
-- **Follow-up idea (not built):** premium is the verifiable signal (open-offer price vs
-  pre-announce close, both public); EV/EBITDA is not. Pivot the empty
-  premium-vs-EV/EBITDA scatter to a **premium-by-sector distribution** (9 real premiums
-  now in the DB).
+- **PR #7 (MERGED — commit 7ff4051): moat made VISIBLE.** Memo stored `sector_comps`
+  but only printed a percentile sentence. Added a **"2a · Sector precedents"** table in
+  `ic_memo.html` (driven by `comps_rows` already in ctx — no query change): VERIFIED rows
+  link to the SEBI/exchange filing (✓), unverified show muted `illustrative`; premiums
+  render only where public, else `n/a`. Also **root-cause fix**: `inr`/`pct`/`num` Jinja
+  filters were only `None`-safe; `pandas.to_dict('records')` yields float `NaN` for blank
+  cells → crashed `indian_group()` on first undisclosed `deal_value` (ACC row). Added
+  shared `_missing()` helper (`x is None or x != x`) to all three filters.
+- **PR #8 (MERGED — commit 460290f): Excel parity.** Added `source_url` column to the
+  Excel "Precedent Comps" tab (`excel_generator.py`) so the model carries the same filing
+  links as the memo (notes column already had the `VERIFIED —` prefix).
+- **Milestone status:** verified-provenance moat is DONE end-to-end (DB → memo → Excel).
+  Remaining verification is opportunistic only.
+- **Follow-up idea (STILL not built):** premium is the verifiable signal (open-offer price
+  vs pre-announce close, both public); EV/EBITDA is not. Pivot the empty
+  premium-vs-EV/EBITDA scatter to a **premium-by-sector distribution** (~7 real premiums in
+  DB, Cement richest at 4). Thin outside Cement — low priority.
 
 ## File map
 Engine (pure Python, INR crore, each has a `methodology` docstring + `__main__` self-check):
