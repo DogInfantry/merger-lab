@@ -66,7 +66,7 @@ Two bugs/features shipped via PR → squash-merge → auto-deploy (all green, 28
   override yfinance; price/shares still come from yfinance. Fixes app dead-ending
   when Yahoo data is stale/wrong.
 
-## Active / next task: precedent-DB verification (IN PROGRESS — 14/37 done)
+## Active / next task: precedent-DB verification (IN PROGRESS — 20/37 verified, 17 ILLUSTRATIVE)
 The 37 deals in `data/seeds/precedent_deals_seed.csv` started ALL marked
 `ILLUSTRATIVE — verify` (fabricated numbers, generic source URLs). This is the
 un-overlappable credibility moat. Rule #3 stands: no fabricated numbers —
@@ -85,14 +85,23 @@ unverifiable premiums are BLANKED (honest-blank beats fake).
   Side effect: no verified deal has BOTH a premium and an EV/EBITDA, so
   `premium_vs_multiple` is now honestly empty → its `__main__` self-check tolerates
   0 rows (query is self-check only, NOT wired into memo/deal_package).
-- **PR #5 (OPEN — branch `data/verify-tier3-precedents`):** 3 tier-3 — JSW Steel-Bhushan
+- **PR #5 (MERGED — commit 8ade52e):** 3 tier-3 — JSW Steel-Bhushan
   Power (**stale-data fix: SC declared IBC plan illegal + ordered liquidation May 2025**),
   Mankind-BSV (date →2024-07-25), SMBC-Yes Bank 20% (date →2025-05-09; status →completed).
-- **Next:** merge PR #5, then ~20 rows still `ILLUSTRATIVE`. Remaining verifiable
-  listed-target deals: Axis-Citi India, Reliance-Just Dial, Route Mobile-Proximus,
-  Bandhan-Gruh, Dalmia-JP, UltraTech-Kesoram. Small/unlisted bolt-ons (Tata Consumer
-  ×3, Curatio, Capital Foods, Organic India, Zomato-Blinkit, Adani-Penna) STAY flagged
-  — no public multiples, expected/honest.
+- **PR #6 (this branch `data/verify-tier4-precedents`):** 6 tier-4 listed targets —
+  Bandhan-Gruh (swap 568:1000; blanked fake -7% premium + 45 P/E), Reliance-Just Dial
+  (open offer Rs 1022.25 = 4.76% **discount** not +10% premium; blanked), Proximus-Route
+  Mobile (57.56% at Rs 1626.40; blanked P/E), UltraTech-Kesoram (swap 1:52; premium set
+  **24.1%** = Rs 173.15 vs Rs 139.45; deal 7600→5379; blanked EV/EBITDA), Axis-Citi
+  (**announce_date 2023-03-30→2022-03-30**; closed ~Rs 11603 cr), Dalmia-JP
+  (**stale-data**: 2022 framework fell through on JAL insolvency → fresh 2026 BTA
+  Rs 2850 cr / 5.2 mtpa; status →withdrawn; blanked EV/EBITDA).
+- **Next:** 17 rows still `ILLUSTRATIVE` — nearly all small/unlisted bolt-ons with NO
+  public multiples, expected to STAY flagged (Tata Consumer ×3, Curatio, Capital Foods,
+  Organic India, Zomato-Blinkit, Adani-Penna, Adani-GVK Mumbai airport, Tata-Neelachal,
+  Sony-Zee + Aster-QCIL withdrawn/announced). Remaining verifiable listed-target
+  candidates thin out here — Vedanta delisting (withdrawn), AU-Fincare (swap 579:2000),
+  Ambuja-Sanghi, Adani-NDTV, Shriram merger. Diminishing returns; verify opportunistically.
 - **Follow-up idea (not built):** premium is the verifiable signal (open-offer price vs
   pre-announce close, both public); EV/EBITDA is not. Pivot the empty
   premium-vs-EV/EBITDA scatter to a **premium-by-sector distribution** (9 real premiums
