@@ -357,9 +357,9 @@ def generate_excel(pkg: DealPackage, path: str | Path) -> Path:
     if pkg.sector_comps is not None and not pkg.sector_comps.empty:
         cols = ["announce_date", "acquirer", "target", "deal_value_cr",
                 "consideration_type", "offer_premium_pct", "ev_ebitda_multiple",
-                "status", "notes"]
+                "status", "notes", "source_url"]
         pc_ws = _sheet(wb, "Precedent Comps", cols,
-                       [12, 26, 26, 14, 12, 12, 12, 11, 30])
+                       [12, 26, 26, 14, 12, 12, 12, 11, 30, 45])
         for i, row in enumerate(pkg.sector_comps[cols].itertuples(index=False),
                                 start=2):
             for j, v in enumerate(row, start=1):
