@@ -195,6 +195,10 @@ if __name__ == "__main__":
     conn = get_connection()
     n = load_seed(conn)
     print(f"loaded {n} seed deals into {DB_PATH.name}")
+    # premium_vs_multiple needs a deal with BOTH a premium and an EV/EBITDA;
+    # verified filings rarely publish EV/EBITDA, so this scatter is honestly
+    # empty until such a pair exists (Rule #3: no fabricated multiples).
+    may_be_empty = {"premium_vs_multiple"}
     for fn, args in [
         (sector_premium_stats, ()),
         (comparable_deals, ("Cement",)),
@@ -202,7 +206,8 @@ if __name__ == "__main__":
         (premium_vs_multiple, ()),
     ]:
         df = fn(conn, *args)
-        assert not df.empty, f"{fn.__name__} returned no rows"
+        if fn.__name__ not in may_be_empty:
+            assert not df.empty, f"{fn.__name__} returned no rows"
         print(f"\n=== {fn.__name__} ===")
         print(df.to_string(index=False))
     print("\nprecedent_db self-check OK")
