@@ -151,6 +151,53 @@ def heat_table(df: pd.DataFrame) -> str:
     return f'<table class="grid heat">{head}{"".join(rows)}</table>'
 
 
+def svg_football_field(rows: list[dict], current: float | None,
+                       offer: float | None, width=640, row_h=34) -> str:
+    """Valuation ranges as horizontal bars + current/offer markers (₹/share)."""
+    vals = [v for r in rows for v in (r["low"], r["high"])]
+    vals += [x for x in (current, offer) if x]
+    lo, hi = min(vals), max(vals)
+    span = (hi - lo) or 1.0
+    lo, hi = lo - span * 0.08, hi + span * 0.08
+    pad_l, pad_r, pad_t = 150, 24, 26
+    pw = width - pad_l - pad_r
+    height = pad_t + len(rows) * row_h + 34
+
+    def X(v):
+        return pad_l + (v - lo) / (hi - lo) * pw
+
+    bars = []
+    for i, r in enumerate(rows):
+        y = pad_t + i * row_h + 6
+        x0, x1, xm = X(r["low"]), X(r["high"]), X(r["mid"])
+        bars.append(
+            f'<text x="{pad_l - 8}" y="{y + 14:.0f}" font-size="10.5" fill="#070B14" '
+            f'text-anchor="end">{r["method"]}</text>'
+            f'<rect x="{x0:.1f}" y="{y:.0f}" width="{max(x1 - x0, 1):.1f}" height="18" '
+            f'rx="2" fill="#070B14" opacity="0.82"/>'
+            f'<line x1="{xm:.1f}" y1="{y - 2:.0f}" x2="{xm:.1f}" y2="{y + 20:.0f}" '
+            f'stroke="#C9A84C" stroke-width="2"/>'
+            f'<text x="{x0 - 3:.1f}" y="{y + 13:.0f}" font-size="8.5" fill="#5a6170" '
+            f'text-anchor="end">₹{r["low"]:,.0f}</text>'
+            f'<text x="{x1 + 3:.1f}" y="{y + 13:.0f}" font-size="8.5" fill="#5a6170">'
+            f'₹{r["high"]:,.0f}</text>')
+
+    def marker(v, lbl, colour):
+        if not v:
+            return ""
+        return (f'<line x1="{X(v):.1f}" y1="{pad_t - 6}" x2="{X(v):.1f}" '
+                f'y2="{pad_t + len(rows) * row_h:.0f}" stroke="{colour}" '
+                f'stroke-width="1.5" stroke-dasharray="5,3"/>'
+                f'<text x="{X(v):.1f}" y="{pad_t + len(rows) * row_h + 14:.0f}" '
+                f'font-size="9" fill="{colour}" text-anchor="middle">{lbl} ₹{v:,.0f}</text>')
+
+    return f"""<svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" role="img">
+<text x="{pad_l - 8}" y="14" font-size="11.5" fill="#070B14" font-weight="bold" text-anchor="end">Valuation range (₹/share)</text>
+{''.join(bars)}
+{marker(current, 'mkt', '#5a6170')}{marker(offer, 'offer', '#b02a1e')}
+</svg>"""
+
+
 # --- rendering ----------------------------------------------------------------
 
 def render_memo_html(pkg: DealPackage) -> str:
@@ -166,6 +213,11 @@ def render_memo_html(pkg: DealPackage) -> str:
         heat_cash_prem=heat_table(pkg.grid_cash_premium),
         comps_rows=(pkg.sector_comps.head(10).to_dict("records")
                     if pkg.sector_comps is not None else []),
+        football_svg=(svg_football_field(pkg.valuation_ranges, pkg.target.price,
+                                         pkg.terms.offer_price)
+                      if pkg.valuation_ranges else None),
+        tc_peer_rows=(pkg.trading_comps.peer_table.to_dict("records")
+                      if pkg.trading_comps is not None else []),
     )
     return env.get_template("ic_memo.html").render(**ctx)
 
