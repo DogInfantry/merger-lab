@@ -51,9 +51,14 @@ def indian_group(n: float) -> str:
     return ("-" if n < 0 else "") + s
 
 
+def _missing(x: float | None) -> bool:
+    """True for None or float NaN (pandas to_dict yields NaN for blank cells)."""
+    return x is None or (isinstance(x, float) and x != x)
+
+
 def inr_cr(x: float | None, decimals: int = 0) -> str:
     """INR crore with Indian digit grouping; decimals only for small values."""
-    if x is None:
+    if _missing(x):
         return "n/a"
     if decimals and abs(x) < 100_000:
         return f"₹{x:,.{decimals}f} Cr"
@@ -61,11 +66,11 @@ def inr_cr(x: float | None, decimals: int = 0) -> str:
 
 
 def pct(x: float | None, decimals: int = 1) -> str:
-    return "n/a" if x is None else f"{x:+.{decimals}f}%"
+    return "n/a" if _missing(x) else f"{x:+.{decimals}f}%"
 
 
 def num(x: float | None, decimals: int = 2) -> str:
-    return "n/a" if x is None else f"{x:,.{decimals}f}"
+    return "n/a" if _missing(x) else f"{x:,.{decimals}f}"
 
 
 # --- SVG charts ---------------------------------------------------------------
