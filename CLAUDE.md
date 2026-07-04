@@ -66,16 +66,25 @@ Two bugs/features shipped via PR → squash-merge → auto-deploy (all green, 28
   override yfinance; price/shares still come from yfinance. Fixes app dead-ending
   when Yahoo data is stale/wrong.
 
-## Active / next task: precedent-DB verification
-The 37 deals in `data/seeds/precedent_deals_seed.csv` are ALL marked
+## Active / next task: precedent-DB verification (IN PROGRESS)
+The 37 deals in `data/seeds/precedent_deals_seed.csv` started ALL marked
 `ILLUSTRATIVE — verify` (fabricated numbers, generic source URLs). This is the
-un-overlappable credibility moat. Next: take the big, well-documented deals
-(HDFC-HDFC Bank merger, L&T-Mindtree, PVR-INOX, Adani-Ambuja/ACC) and replace
-the illustrative premium/deal-value/multiple numbers with figures verified from
-public SEBI/BSE filings + real source_url; leave the rest honestly flagged.
-Rule #3 stands: no fabricated numbers — unverifiable stays ILLUSTRATIVE. Agent
-CAN fetch public filings during dev (that is research, not the forbidden
-runtime scraping).
+un-overlappable credibility moat. Rule #3 stands: no fabricated numbers —
+unverifiable stays ILLUSTRATIVE. Agent CAN fetch public filings during dev
+(research, not the forbidden runtime scraping).
+
+- **Done (PR #3, OPEN — branch `data/verify-marquee-precedents`, NOT merged):**
+  4 marquee deals verified from filings + real source_url, note prefix `VERIFIED —`:
+  L&T-Mindtree (₹10,733 cr; 1.8% prem = ₹980 vs ₹962.5), PVR-INOX (swap 3:10; ~20%
+  implied prem), HDFC Bank-HDFC Ltd (swap 42:25; 41% ownership; deal_value fixed
+  628000→304000 ≈ USD 40bn), Adani-Ambuja (open offer 26% @₹385, ~7%) + Adani-ACC
+  (open offer @₹2300, ~7%). EV/EBITDA & P/E multiples BLANKED on these 5 rows —
+  they were analyst calcs, not in primary filings, so honest-blank beats fake.
+  DB reloads 37 rows; generator + anchor tests green.
+- **Next:** remaining 33 rows still `ILLUSTRATIVE`. Verify the next tier where clean
+  public numbers exist (JSW-Bhushan, HUL-GSK, Zomato-Blinkit, Torrent-JB Chem, etc.);
+  small/unlisted-target deals will stay flagged (no public multiples — expected).
+- **First:** merge PR #3 (→ CI auto-deploys to HF Space) before starting the next tier.
 
 ## File map
 Engine (pure Python, INR crore, each has a `methodology` docstring + `__main__` self-check):
