@@ -101,6 +101,23 @@
 <p class="muted">Premium at the {{ "%.0f"|format(pkg.sector_premium_percentile) }}th percentile of
 sector precedents (Merger Lab precedent DB; entries marked ILLUSTRATIVE pending filing verification).</p>
 {% endif %}
+{% if comps_rows %}
+<h3>2a · Sector precedents <span class="muted">({{ comps_rows|length }} most recent; ✓ = verified against SEBI/filing sources)</span></h3>
+<table>
+  <tr><th>Announced</th><th>Acquirer → Target</th><th>Deal (₹ Cr)</th><th>Premium</th><th>Type</th><th>Provenance</th></tr>
+  {% for r in comps_rows %}
+  <tr>
+    <td>{{ r.announce_date }}</td>
+    <td>{{ r.acquirer }} → {{ r.target }}</td>
+    <td>{{ r.deal_value_cr|inr }}</td>
+    <td>{{ r.offer_premium_pct|pct(1) }}</td>
+    <td>{{ r.consideration_type }}</td>
+    <td>{% if r.notes and r.notes.startswith('VERIFIED') %}<a href="{{ r.source_url }}">✓ verified</a>{% else %}<span class="muted">illustrative</span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+<p class="muted">Verified rows link to the SEBI letter of offer or exchange filing; premiums shown only where the open-offer price vs pre-announcement close is public. Blank premiums/multiples are honestly withheld, not estimated.</p>
+{% endif %}
 </section>
 
 <!-- 3. STRATEGIC RATIONALE -->
