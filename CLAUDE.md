@@ -66,25 +66,37 @@ Two bugs/features shipped via PR → squash-merge → auto-deploy (all green, 28
   override yfinance; price/shares still come from yfinance. Fixes app dead-ending
   when Yahoo data is stale/wrong.
 
-## Active / next task: precedent-DB verification (IN PROGRESS)
+## Active / next task: precedent-DB verification (IN PROGRESS — 14/37 done)
 The 37 deals in `data/seeds/precedent_deals_seed.csv` started ALL marked
 `ILLUSTRATIVE — verify` (fabricated numbers, generic source URLs). This is the
 un-overlappable credibility moat. Rule #3 stands: no fabricated numbers —
 unverifiable stays ILLUSTRATIVE. Agent CAN fetch public filings during dev
-(research, not the forbidden runtime scraping).
+(research, not the forbidden runtime scraping). Verified rows carry note prefix
+`VERIFIED —` + a real deal-specific `source_url`; analyst-only EV/EBITDA & P/E and
+unverifiable premiums are BLANKED (honest-blank beats fake).
 
-- **Done (PR #3, OPEN — branch `data/verify-marquee-precedents`, NOT merged):**
-  4 marquee deals verified from filings + real source_url, note prefix `VERIFIED —`:
-  L&T-Mindtree (₹10,733 cr; 1.8% prem = ₹980 vs ₹962.5), PVR-INOX (swap 3:10; ~20%
-  implied prem), HDFC Bank-HDFC Ltd (swap 42:25; 41% ownership; deal_value fixed
-  628000→304000 ≈ USD 40bn), Adani-Ambuja (open offer 26% @₹385, ~7%) + Adani-ACC
-  (open offer @₹2300, ~7%). EV/EBITDA & P/E multiples BLANKED on these 5 rows —
-  they were analyst calcs, not in primary filings, so honest-blank beats fake.
-  DB reloads 37 rows; generator + anchor tests green.
-- **Next:** remaining 33 rows still `ILLUSTRATIVE`. Verify the next tier where clean
-  public numbers exist (JSW-Bhushan, HUL-GSK, Zomato-Blinkit, Torrent-JB Chem, etc.);
-  small/unlisted-target deals will stay flagged (no public multiples — expected).
-- **First:** merge PR #3 (→ CI auto-deploys to HF Space) before starting the next tier.
+- **PR #3 (MERGED):** 4 marquee deals (5 rows) — L&T-Mindtree, PVR-INOX,
+  HDFC Bank-HDFC Ltd (swap 42:25; deal_value 628000→304000 ≈ USD 40bn),
+  Adani-Ambuja + Adani-ACC.
+- **PR #4 (MERGED):** 6 tier-2 — HUL-GSK (swap 4.39:1; date 2019-12-01→2018-12-03),
+  IDFC-IDFC First (reverse merger 155:100), Nirma-Glenmark (₹615/sh), Ambuja-Orient
+  (open offer ₹395.40 = **12.27% verified premium**), JSW Paints-Akzo (₹3417.77 open
+  offer), Torrent-JB Chem (SPA ₹1600 / open offer ₹1639.18 / merger 51:100).
+  Side effect: no verified deal has BOTH a premium and an EV/EBITDA, so
+  `premium_vs_multiple` is now honestly empty → its `__main__` self-check tolerates
+  0 rows (query is self-check only, NOT wired into memo/deal_package).
+- **PR #5 (OPEN — branch `data/verify-tier3-precedents`):** 3 tier-3 — JSW Steel-Bhushan
+  Power (**stale-data fix: SC declared IBC plan illegal + ordered liquidation May 2025**),
+  Mankind-BSV (date →2024-07-25), SMBC-Yes Bank 20% (date →2025-05-09; status →completed).
+- **Next:** merge PR #5, then ~20 rows still `ILLUSTRATIVE`. Remaining verifiable
+  listed-target deals: Axis-Citi India, Reliance-Just Dial, Route Mobile-Proximus,
+  Bandhan-Gruh, Dalmia-JP, UltraTech-Kesoram. Small/unlisted bolt-ons (Tata Consumer
+  ×3, Curatio, Capital Foods, Organic India, Zomato-Blinkit, Adani-Penna) STAY flagged
+  — no public multiples, expected/honest.
+- **Follow-up idea (not built):** premium is the verifiable signal (open-offer price vs
+  pre-announce close, both public); EV/EBITDA is not. Pivot the empty
+  premium-vs-EV/EBITDA scatter to a **premium-by-sector distribution** (9 real premiums
+  now in the DB).
 
 ## File map
 Engine (pure Python, INR crore, each has a `methodology` docstring + `__main__` self-check):
