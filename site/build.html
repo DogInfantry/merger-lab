@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MERGER LAB — Run your own deal</title>
+<meta name="description" content="Structure a live India M&A deal inside the RBI 2026 and SEBI Takeover guardrails; get a full IC memo with DCF, trading comps and a football-field valuation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#070B14; --panel:#0D1420; --line:#1C2536; --gold:#C9A84C; --txt:#E8EAEE; --mut:#8A93A5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--navy); color: var(--txt); font-family: "IBM Plex Sans", sans-serif; line-height: 1.5; }
+  a { color: var(--gold); text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
+  header { padding: 44px 0 24px; border-bottom: 1px solid var(--line); }
+  .tag { color: var(--gold); letter-spacing: 4px; font-size: 12px; }
+  h1 { font-family: "IBM Plex Serif", serif; font-size: clamp(28px, 5vw, 42px); margin: 8px 0 6px; }
+  .sub { color: var(--mut); max-width: 720px; font-size: 15px; }
+  .layout { display: grid; grid-template-columns: 340px 1fr; gap: 26px; padding: 28px 0 60px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+  form { background: var(--panel); border: 1px solid var(--line); padding: 20px; position: sticky; top: 16px; }
+  label { display: block; font-size: 12px; color: var(--mut); margin: 12px 0 4px; letter-spacing: .3px; }
+  input, select { width: 100%; background: #0a1120; border: 1px solid var(--line); color: var(--txt);
+                  padding: 8px 10px; font-family: inherit; font-size: 14px; }
+  input[type=range] { padding: 0; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  button { width: 100%; margin-top: 18px; background: var(--gold); color: var(--navy); border: 0;
+           padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  button:disabled { opacity: .5; cursor: wait; }
+  .results { min-height: 300px; }
+  .placeholder, .err { border: 1px dashed var(--line); padding: 40px 24px; color: var(--mut); text-align: center; }
+  .err { border-color: #b0402e; color: #f0a89a; }
+  .rec { border: 1px solid var(--gold); background: var(--panel); padding: 18px 20px; margin-bottom: 16px; }
+  .rec .verdict { font-family: "IBM Plex Serif", serif; font-size: 22px; font-weight: 700; }
+  .v-p { color: #4ade80; } .v-c { color: var(--gold); } .v-d { color: #f87171; }
+  .rec .why { color: var(--mut); font-size: 13.5px; margin-top: 6px; }
+  .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .chip { border: 1px solid var(--line); background: var(--panel); padding: 12px 14px; }
+  .chip .k { color: var(--mut); font-size: 11px; letter-spacing: .5px; text-transform: uppercase; }
+  .chip .v { font-size: 18px; margin-top: 3px; font-weight: 600; }
+  .memo-frame { width: 100%; height: 78vh; border: 1px solid var(--line); background: #fff; }
+  .spin { display:inline-block; width:14px; height:14px; border:2px solid var(--navy); border-top-color:transparent;
+          border-radius:50%; animation: sp .7s linear infinite; vertical-align:-2px; margin-right:6px; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  footer { padding: 26px 0 50px; color: var(--mut); font-size: 12px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="tag mono">MERGER LAB · DEAL ROOM</div>
+  <h1>Run your own deal</h1>
+  <p class="sub">Pick a listed acquirer and target, set the terms, and get the full IC memo —
+    RBI 2026 guardrails, SEBI Takeover mechanics, optimizer, 10,000 Monte-Carlo paths, and a
+    standalone valuation (DCF · trading comps · football field). Live public data, computed
+    server-side. <a href="index.html">← sample deal rooms</a></p>
+</header>
+
+<div class="wrap layout">
+  <form id="deal">
+    <label>Project codename</label>
+    <input id="codename" value="Project Horizon">
+    <div class="row2">
+      <div><label>Acquirer ticker</label><input id="acquirer" value="INFY.NS"></div>
+      <div><label>Target ticker</label><input id="target" value="PERSISTENT.NS"></div>
+    </div>
+    <label>Sector <span class="mono" style="color:var(--mut)">(precedents + trading comps)</span></label>
+    <select id="sector"></select>
+    <div class="row2">
+      <div><label>Premium % <output id="premium_out">18</output></label>
+        <input type="range" id="premium_pct" min="-10" max="60" step="0.5" value="18"></div>
+      <div><label>Stake % <output id="stake_out">100</output></label>
+        <input type="range" id="stake_pct" min="26" max="100" step="1" value="100"></div>
+    </div>
+    <div class="row2">
+      <div><label>% cash <output id="cash_out">50</output></label>
+        <input type="range" id="pct_cash" min="0" max="100" step="5" value="50"></div>
+      <div><label>% cash from debt <output id="debt_out">60</output></label>
+        <input type="range" id="pct_debt" min="0" max="100" step="5" value="60"></div>
+    </div>
+    <div class="row2">
+      <div><label>WACC % <output id="wacc_out">12</output></label>
+        <input type="range" id="wacc_pct" min="8" max="18" step="0.25" value="12"></div>
+      <div><label>Synergies ₹Cr</label><input id="synergies_cr" type="number" value="400" step="50"></div>
+    </div>
+    <button id="run" type="submit">⚡ Run the deal</button>
+    <p class="mono" style="color:var(--mut);font-size:10.5px;margin-top:12px">
+      Pure-compute engine · free public data · no account, no API keys billed.</p>
+  </form>
+
+  <div class="results" id="results">
+    <div class="placeholder">Set the terms and hit <b>Run the deal</b>.<br>
+      The full IC memo renders here — the same artifact the samples ship.</div>
+  </div>
+</div>
+
+<footer class="wrap">
+  Illustrative analysis on public data (yfinance, exchange filings). Not investment advice.
+  RBI/SEBI parameters should be verified against the master directions.
+  <span class="mono">· MERGER LAB · DogInfantry</span>
+</footer>
+
+<script>
+// Point this at the FastAPI Space. Same-origin '/api' works if proxied; otherwise the Space URL.
+const API_BASE = "https://doginfantry-merger-lab-api.hf.space";
+
+const $ = id => document.getElementById(id);
+// live slider read-outs
+[["premium_pct","premium_out"],["stake_pct","stake_out"],["pct_cash","cash_out"],
+ ["pct_debt","debt_out"],["wacc_pct","wacc_out"]].forEach(([i,o]) => {
+  const el = $(i); el.addEventListener("input", () => $(o).textContent = el.value);
+});
+
+async function loadSectors() {
+  const sel = $("sector");
+  sel.innerHTML = '<option value="">— none —</option>';
+  try {
+    const r = await fetch(API_BASE + "/api/health");
+    const j = await r.json();
+    (j.sectors || []).forEach(s => {
+      const o = document.createElement("option"); o.value = s; o.textContent = s; sel.appendChild(o);
+    });
+    sel.value = "IT Services";
+  } catch (e) { /* offline: leave 'none' */ }
+}
+loadSectors();
+
+const verdictClass = v => v.startsWith("PROCEED WITH") ? "v-c" : v.startsWith("PROCEED") ? "v-p" : "v-d";
+
+$("deal").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("run"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Running engine…';
+  $("results").innerHTML = '<div class="placeholder"><span class="spin"></span>' +
+    'Fetching data, running RBI/SEBI stack, optimizer, 10,000 Monte-Carlo paths, DCF and comps…</div>';
+  const body = {
+    codename: $("codename").value, acquirer: $("acquirer").value.trim().toUpperCase(),
+    target: $("target").value.trim().toUpperCase(), sector: $("sector").value || null,
+    premium_pct: +$("premium_pct").value, stake_pct: +$("stake_pct").value,
+    pct_cash: +$("pct_cash").value, pct_debt: +$("pct_debt").value,
+    wacc_pct: +$("wacc_pct").value, synergies_cr: +$("synergies_cr").value,
+  };
+  try {
+    const r = await fetch(API_BASE + "/api/deal", {
+      method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body) });
+    if (!r.ok) throw new Error((await r.json().catch(()=>({}))).detail || ("HTTP " + r.status));
+    const d = await r.json();
+    const chip = (k, v) => `<div class="chip"><div class="k">${k}</div><div class="v">${v}</div></div>`;
+    $("results").innerHTML =
+      `<div class="rec"><span class="verdict ${verdictClass(d.recommendation)}">${d.recommendation}</span>
+         <div class="why">${d.rationale}</div></div>
+       <div class="chips">
+         ${chip("Year-1 accretion", (d.year1_accretion_pct>=0?"+":"") + d.year1_accretion_pct + "%")}
+         ${chip("P(Y2 accretive)", Math.round(d.p_y2_accretive*100) + "%")}
+         ${chip("RBI guardrails", d.rbi_pass ? "PASS" : "FAIL")}
+         ${chip("DCF / share", d.dcf_per_share!=null ? "₹"+d.dcf_per_share.toLocaleString("en-IN") : "n/a")}
+         ${chip("Comps / share", d.comps_per_share!=null ? "₹"+d.comps_per_share.toLocaleString("en-IN") : "n/a")}
+         ${chip("Offer / share", "₹"+d.offer_price.toLocaleString("en-IN"))}
+       </div>
+       <iframe class="memo-frame" title="IC memo"></iframe>`;
+    $("results").querySelector("iframe").srcdoc = d.memo_html;
+  } catch (err) {
+    $("results").innerHTML = `<div class="err"><b>Could not run the deal.</b><br>${err.message}<br>
+      <span class="mono" style="font-size:11px">If the API Space is asleep it may take ~30s to wake — retry once.</span></div>`;
+  } finally { btn.disabled = false; btn.textContent = "⚡ Run the deal"; }
+});
+</script>
+</body>
+</html>
