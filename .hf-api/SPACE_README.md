@@ -6,7 +6,7 @@ colorTo: indigo
 sdk: docker
 app_port: 7860
 pinned: false
-short_description: Merger Lab engine API — IC memo JSON/HTML for the web deal room
+short_description: Merger Lab engine API for the web deal room
 ---
 
 # MERGER LAB — API
