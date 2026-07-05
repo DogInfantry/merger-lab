@@ -1,0 +1,14 @@
+# Vercel serves only site/ (vercel.json outputDirectory). Keep the Python engine,
+# tests, samples and — critically — /api off the deploy, so Vercel never mistakes
+# /api for serverless functions or triggers a Python build. The engine runs on its
+# own HF Space; Vercel hosts the static front-end only.
+/api
+/app
+/src
+/tests
+/samples
+/data
+/docs
+/.hf
+/.hf-api
+generate_samples.py

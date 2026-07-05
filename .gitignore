@@ -4,3 +4,5 @@ __pycache__/
 data/cache/
 data/precedent_deals.db
 .streamlit/secrets.toml
+
+.vercel
