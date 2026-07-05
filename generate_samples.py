@@ -30,6 +30,7 @@ from deal_package import build_deal_package
 from excel_generator import generate_excel
 from memo_generator import _chromium_path, generate_memo, render_memo_html
 from precedent_db import get_connection, load_seed
+from trading_comps import fetch_sector_peers
 
 DEALS = [
     dict(
@@ -105,15 +106,24 @@ def main() -> None:
             except Exception as e:
                 print(f"  vol unavailable ({e}); collar skipped")
 
+        peers = fetch_sector_peers(
+            cfg["sector"], fetch_company,
+            exclude={cfg["acquirer"], cfg["target"]})
+
         pkg = build_deal_package(
             acq, tgt, terms, codename=cfg["codename"],
             strategic_rationale=cfg["rationale"], key_risks=cfg["risks"],
-            volatility=vol, precedent_conn=conn, sector=cfg["sector"])
+            volatility=vol, precedent_conn=conn, sector=cfg["sector"],
+            peers=peers)
 
         slug = cfg["codename"].lower().replace(" ", "_")
         out_dir = ROOT / "samples" / slug
         memo = generate_memo(pkg, out_dir / f"{slug}_ic_memo.pdf")
         xlsx = generate_excel(pkg, out_dir / f"{slug}_model.xlsx")
+        # Web-native premium memo for the Vercel deal room (real HTML, not a PDF embed)
+        web_dir = ROOT / "site" / "deals"
+        web_dir.mkdir(parents=True, exist_ok=True)
+        (web_dir / f"{slug}.html").write_text(render_memo_html(pkg), encoding="utf-8")
         print(f"  {pkg.recommendation} | Y1 {pkg.ad.year1_accretion_pct:+.2f}% | "
               f"P(Y2) {pkg.mc.p_y2_accretive:.0%} | memo {memo.name} "
               f"({memo.stat().st_size // 1024} KB) | model {xlsx.name}")

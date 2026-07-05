@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Bastion — Investment Committee Memorandum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#070B14; --gold:#C9A84C; --ink:#1a1d24; --muted:#5a6170; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page {
+    size: A4; margin: 22mm 16mm 20mm 16mm;
+    @bottom-center { content: "MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE";
+                     font-family: "IBM Plex Sans", sans-serif; font-size: 7.5pt; color: #5a6170; }
+    @bottom-right  { content: counter(page); font-family: "IBM Plex Sans", sans-serif;
+                     font-size: 8pt; color: #5a6170; }
+  }
+  body { font-family: "IBM Plex Sans", "Segoe UI", sans-serif; color: var(--ink);
+         font-size: 9.5pt; line-height: 1.45; }
+  h1, h2, h3 { font-family: "IBM Plex Serif", Georgia, serif; color: var(--navy); }
+  h2 { font-size: 13pt; border-bottom: 2px solid var(--gold); padding: 14px 0 4px;
+       margin-bottom: 8px; page-break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 10px 0 4px; }
+  p  { margin: 4px 0; }
+  .footer-band { position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
+                 font-size: 7.5pt; color: var(--muted); padding: 2mm 0;
+                 border-top: 0.5pt solid #d8dbe0; background: #fff; }
+  @media screen {
+    html { background: #070B14; }
+    body { max-width: 880px; margin: 28px auto; background: #fff; padding: 0 40px 44px;
+           box-shadow: 0 10px 50px rgba(0,0,0,0.55); border-radius: 2px; }
+    .footer-band { display: none; }
+  }
+
+  .cover { background: var(--navy); color: #eef0f4; padding: 34px 30px; margin-bottom: 14px; }
+  .cover .lab { font-family: "IBM Plex Mono", monospace; color: var(--gold);
+                font-size: 8.5pt; letter-spacing: 3px; }
+  .cover h1 { color: #fff; font-size: 24pt; margin: 10px 0 2px; }
+  .cover .sub { color: #aab2c0; font-size: 10pt; }
+  .rec-box { margin-top: 18px; border: 1.5px solid var(--gold); padding: 14px 18px; }
+  .rec-box .verdict { font-family: "IBM Plex Serif", serif; font-size: 16pt;
+                      color: var(--gold); font-weight: 700; }
+  .kpi-row { display: flex; gap: 26px; margin-top: 10px; }
+  .kpi .v { font-size: 13pt; font-weight: 600; color: #fff; }
+  .kpi .k { font-size: 7.5pt; color: #aab2c0; text-transform: uppercase; letter-spacing: 1px; }
+
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 8.6pt; }
+  th, td { padding: 3.5px 7px; text-align: right; border-bottom: 0.5pt solid #d8dbe0; }
+  th { background: var(--navy); color: #fff; font-weight: 500; }
+  td:first-child, th:first-child { text-align: left; }
+  tr.total td { border-top: 1.2pt solid var(--navy); font-weight: 600; }
+  .grid th, .grid td { text-align: center; font-size: 8pt; padding: 3px 5px; }
+  .grid th:first-child { text-align: right; }
+  .pass { color: #1d7a4a; font-weight: 700; }
+  .fail { color: #b02a1e; font-weight: 700; }
+  .flag { background: #fdf6e3; border-left: 3px solid var(--gold);
+          padding: 8px 12px; margin: 8px 0; font-size: 9pt; }
+  .warn { background: #fbeae8; border-left: 3px solid #b02a1e;
+          padding: 8px 12px; margin: 8px 0; font-size: 9pt; font-weight: 600; }
+  .muted { color: var(--muted); font-size: 8.3pt; }
+  ul { margin: 4px 0 8px 18px; }
+  li { margin: 2.5px 0; }
+  section { page-break-inside: avoid; }
+  .pagebreak { page-break-before: always; }
+  svg { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="footer-band">MERGER LAB · DogInfantry · CONFIDENTIAL — ILLUSTRATIVE</div>
+
+<!-- 1. COVER / RECOMMENDATION -->
+<div class="cover">
+  <div class="lab">MERGER LAB · INVESTMENT COMMITTEE MEMORANDUM</div>
+  <h1>Project Bastion</h1>
+  <div class="sub">UltraTech Cement Limited &nbsp;/&nbsp; J.K. Cement Limited
+       &nbsp;·&nbsp; prepared 2026-07-05</div>
+  <div class="rec-box">
+    <div class="verdict">DECLINE</div>
+    <p style="color:#dfe3ea; margin-top:6px;">Only 0% probability of Year-2 accretion — earnings risk outweighs strategic merit at this price.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">-35.3%</div><div class="k">Year-1 EPS impact</div></div>
+      <div class="kpi"><div class="v">0%</div><div class="k">P(accretive by Y2)</div></div>
+      <div class="kpi"><div class="v">₹-3,425 Cr</div><div class="k">Net value created</div></div>
+      <div class="kpi"><div class="v">+15.0%</div><div class="k">Offer premium</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. TRANSACTION SUMMARY -->
+<section>
+<h2>2 · Transaction Summary</h2>
+<table>
+  <tr><th>Term</th><th>Value</th><th>Term</th><th>Value</th></tr>
+  <tr><td>Acquirer</td><td>UltraTech Cement Limited (ULTRACEMCO.NS)</td>
+      <td>Offer price</td><td>₹6,319.82</td></tr>
+  <tr><td>Target</td><td>J.K. Cement Limited (JKCEMENT.NS)</td>
+      <td>Premium to undisturbed</td><td>+15.0%</td></tr>
+  <tr><td>Negotiated stake</td><td>64%</td>
+      <td>Consideration</td><td>100% cash / 0% stock</td></tr>
+  <tr><td>Equity purchase (negotiated)</td><td>₹31,253 Cr</td>
+      <td>Implied EV / EBITDA</td><td>22.8x</td></tr>
+  <tr><td>Open offer (at 100% acceptance)</td><td>₹12,696 Cr</td>
+      <td>Implied P / E</td><td>49.2x</td></tr>
+</table>
+
+<p class="muted">Premium at the 75th percentile of
+sector precedents (Merger Lab precedent DB; entries marked ILLUSTRATIVE pending filing verification).</p>
+
+
+<h3>2a · Sector precedents <span class="muted">(7 most recent; ✓ = verified against SEBI/filing sources)</span></h3>
+<table>
+  <tr><th>Announced</th><th>Acquirer → Target</th><th>Deal (₹ Cr)</th><th>Premium</th><th>Type</th><th>Provenance</th></tr>
+  
+  <tr>
+    <td>2024-10-22</td>
+    <td>Ambuja Cements → Orient Cement</td>
+    <td>₹8,100 Cr</td>
+    <td>+12.3%</td>
+    <td>cash</td>
+    <td><a href="https://www.business-standard.com/markets/capital-market-news/ambuja-cements-to-46-8-stake-in-orient-cement-announces-open-offer-at-rs-395-40-share-124102200252_1.html">✓ verified</a></td>
+  </tr>
+  
+  <tr>
+    <td>2024-06-13</td>
+    <td>Adani Group (Ambuja) → Penna Cement</td>
+    <td>₹10,422 Cr</td>
+    <td>n/a</td>
+    <td>cash</td>
+    <td><span class="muted">illustrative</span></td>
+  </tr>
+  
+  <tr>
+    <td>2023-11-30</td>
+    <td>UltraTech Cement → Kesoram Industries (cement business)</td>
+    <td>₹5,379 Cr</td>
+    <td>+24.1%</td>
+    <td>stock</td>
+    <td><a href="https://www.businesstoday.in/latest/corporate/story/ultratech-cement-to-buy-kesorams-cement-business-in-rs-5379-cr-deal-announces-swap-ratio-of-152-407773-2023-11-30">✓ verified</a></td>
+  </tr>
+  
+  <tr>
+    <td>2023-08-03</td>
+    <td>Ambuja Cements → Sanghi Industries</td>
+    <td>₹5,000 Cr</td>
+    <td>n/a</td>
+    <td>cash</td>
+    <td><span class="muted">illustrative</span></td>
+  </tr>
+  
+  <tr>
+    <td>2022-12-12</td>
+    <td>Dalmia Bharat → Jaiprakash Associates (cement assets)</td>
+    <td>₹5,666 Cr</td>
+    <td>n/a</td>
+    <td>cash</td>
+    <td><a href="https://www.businessupturn.com/business/dalmia-bharat-acquires-5-2-mntpa-cement-capacity-from-jal-for-rs-2850-crore">✓ verified</a></td>
+  </tr>
+  
+  <tr>
+    <td>2022-05-15</td>
+    <td>Adani Group (Endeavour Trade) → Ambuja Cements</td>
+    <td>₹51,000 Cr</td>
+    <td>+7.0%</td>
+    <td>cash</td>
+    <td><a href="https://www.adani.com/newsroom/media-releases/adani-to-acquire-holcims-stake-in-ambuja-cements-and-acc-limited">✓ verified</a></td>
+  </tr>
+  
+  <tr>
+    <td>2022-05-15</td>
+    <td>Adani Group (Endeavour Trade) → ACC</td>
+    <td>n/a</td>
+    <td>+7.0%</td>
+    <td>cash</td>
+    <td><a href="https://www.adani.com/newsroom/media-releases/adani-to-acquire-holcims-stake-in-ambuja-cements-and-acc-limited">✓ verified</a></td>
+  </tr>
+  
+</table>
+<p class="muted">Verified rows link to the SEBI letter of offer or exchange filing; premiums shown only where the open-offer price vs pre-announcement close is public. Blank premiums/multiples are honestly withheld, not estimated.</p>
+
+</section>
+
+<!-- 2b. STANDALONE VALUATION -->
+
+<section>
+<h2>2b · Standalone Valuation <span class="muted">— intrinsic vs the offer</span></h2>
+<svg viewBox="0 0 640 128" xmlns="http://www.w3.org/2000/svg" role="img">
+<text x="142" y="14" font-size="11.5" fill="#070B14" font-weight="bold" text-anchor="end">Valuation range (₹/share)</text>
+<text x="142" y="46" font-size="10.5" fill="#070B14" text-anchor="end">DCF (intrinsic)</text><rect x="182.1" y="32" width="61.1" height="18" rx="2" fill="#070B14" opacity="0.82"/><line x1="207.0" y1="30" x2="207.0" y2="52" stroke="#C9A84C" stroke-width="2"/><text x="179.1" y="45" font-size="8.5" fill="#5a6170" text-anchor="end">₹1,172</text><text x="246.3" y="45" font-size="8.5" fill="#5a6170">₹1,955</text><text x="142" y="80" font-size="10.5" fill="#070B14" text-anchor="end">Trading comps</text><rect x="353.2" y="66" width="38.6" height="18" rx="2" fill="#070B14" opacity="0.82"/><line x1="387.2" y1="64" x2="387.2" y2="86" stroke="#C9A84C" stroke-width="2"/><text x="350.2" y="79" font-size="8.5" fill="#5a6170" text-anchor="end">₹3,363</text><text x="394.7" y="79" font-size="8.5" fill="#5a6170">₹3,857</text>
+<line x1="519.5" y1="20" x2="519.5" y2="94" stroke="#5a6170" stroke-width="1.5" stroke-dasharray="5,3"/><text x="519.5" y="108" font-size="9" fill="#5a6170" text-anchor="middle">mkt ₹5,496</text><line x1="583.9" y1="20" x2="583.9" y2="94" stroke="#b02a1e" stroke-width="1.5" stroke-dasharray="5,3"/><text x="583.9" y="108" font-size="9" fill="#b02a1e" text-anchor="middle">offer ₹6,320</text>
+</svg>
+<p class="muted">Where the target trades on its own economics — independent of the deal.
+The offer (red) sits against a DCF intrinsic range and listed-peer trading comps;
+gold tick = central estimate. Accretion is relative; this is the absolute check.</p>
+
+
+<h3>Discounted cash flow (unlevered FCFF)</h3>
+<p>Two-stage FCFF DCF values J.K. Cement Limited at Rs 1,490/share (equity Rs 11,516 Cr), a range of Rs 1,172-1,955 across WACC 11-13%. 71% of value sits in the terminal year; -73% vs the Rs 5,496 market price.</p>
+<table>
+  <tr><th>Enterprise value</th><th>Equity value</th><th>Value / share</th><th>vs market</th><th>Terminal weight</th></tr>
+  <tr>
+    <td>₹16,669 Cr</td>
+    <td>₹11,516 Cr</td>
+    <td>₹1,490</td>
+    <td>-73%</td>
+    <td>71%</td>
+  </tr>
+</table>
+<p class="muted">Assumptions: WACC 12.0%,
+revenue growth 8.0%,
+terminal growth 4.0%,
+EBITDA margin 17.2%,
+over 5 explicit years. Tunable drivers, not fitted.</p>
+
+
+
+<h3>Trading comps <span class="muted">(listed peers)</span></h3>
+<p>Peer trading comps (n=4) imply Rs 3,800/share for J.K. Cement Limited (range Rs 3,363-3,857) at median EV/EBITDA 14.6x, P/E 26.2x.</p>
+<table class="grid">
+  <tr><th>Peer</th><th>EV/EBITDA</th><th>EV/Sales</th><th>P/E</th></tr>
+  
+  <tr>
+    <td style="text-align:left">Shree Cement Limited</td>
+    <td>34.9x</td>
+    <td>11.0x</td>
+    <td>74.9x</td>
+  </tr>
+  
+  <tr>
+    <td style="text-align:left">Ambuja Cements Limited</td>
+    <td>17.3x</td>
+    <td>2.7x</td>
+    <td>23.3x</td>
+  </tr>
+  
+  <tr>
+    <td style="text-align:left">ACC Limited</td>
+    <td>9.5x</td>
+    <td>1.0x</td>
+    <td>12.2x</td>
+  </tr>
+  
+  <tr>
+    <td style="text-align:left">Dalmia Bharat Limited</td>
+    <td>11.9x</td>
+    <td>2.4x</td>
+    <td>29.1x</td>
+  </tr>
+  
+  <tr class="total"><td style="text-align:left">Median</td>
+    <td>14.6x</td>
+    <td>2.5x</td>
+    <td>26.2x</td></tr>
+</table>
+
+</section>
+
+
+<!-- 3. STRATEGIC RATIONALE -->
+
+<section>
+<h2>3 · Strategic Rationale</h2>
+<ul><li>Consolidates grey-cement capacity in North India amid the post-RBI-2026 M&A wave</li><li>Promoter block purchase (64%) with mandatory 26% open offer — full SAST mechanics on display</li><li>Illustrative synergies from freight/clinker network optimization</li></ul>
+</section>
+
+
+<!-- 4. REGULATORY STACK -->
+<section class="pagebreak">
+<h2>4 · Regulatory Stack — RBI · SEBI SAST · CCI</h2>
+
+<h3>4a · Sources &amp; Uses across open-offer acceptance scenarios</h3>
+<table>
+  <tr><th>₹ Cr</th><th>0% acceptance</th><th>50% acceptance</th><th>100% acceptance</th></tr>
+  <tr><td>Equity purchase (negotiated)</td><td>₹31,253 Cr</td><td>₹31,253 Cr</td><td>₹31,253 Cr</td></tr>
+  <tr><td>Open offer consideration</td><td>₹0 Cr</td><td>₹6,348 Cr</td><td>₹12,696 Cr</td></tr>
+  <tr><td>Refinance target debt</td><td>₹0 Cr</td><td>₹0 Cr</td><td>₹0 Cr</td></tr>
+  <tr><td>Transaction fees</td><td>₹469 Cr</td><td>₹564 Cr</td><td>₹659 Cr</td></tr>
+  <tr class="total"><td>Total uses</td><td>₹31,721 Cr</td><td>₹38,165 Cr</td><td>₹44,608 Cr</td></tr>
+  <tr><td>New acquirer stock</td><td>₹0 Cr</td><td>₹0 Cr</td><td>₹0 Cr</td></tr>
+  <tr><td>New bank debt</td><td>₹20,619 Cr</td><td>₹24,807 Cr</td><td>₹28,995 Cr</td></tr>
+  <tr><td>Balance-sheet cash</td><td>₹11,102 Cr</td><td>₹13,358 Cr</td><td>₹15,613 Cr</td></tr>
+  <tr class="total"><td>Total sources</td><td>₹31,721 Cr</td><td>₹38,165 Cr</td><td>₹44,608 Cr</td></tr>
+</table>
+
+<h3>4b · RBI acquisition-finance compliance <span class="muted">(Amendment Directions 2026, at 100% acceptance)</span></h3>
+<table>
+  <tr><th>Check</th><th>Value</th><th>Threshold</th><th>Status</th><th>Note</th></tr>
+  
+  <tr><td>Bank debt <= 75% of acquisition value</td><td>66.0</td><td><= 75%</td>
+      <td class="pass">PASS</td>
+      <td style="text-align:left" class="muted">New bank debt Rs 28,995 Cr funds 66.0% of the Rs 43,949 Cr acquisition value.</td></tr>
+  
+  <tr><td>Acquirer equity contribution >= 25%</td><td>35.0</td><td>>= 25%</td>
+      <td class="pass">PASS</td>
+      <td style="text-align:left" class="muted">Stock + own cash contribute 35.0% of total funding of Rs 44,608 Cr.</td></tr>
+  
+  <tr><td>Pro-forma consolidated D/E <= 3.0x</td><td>0.82</td><td><= 3.0x</td>
+      <td class="pass">PASS</td>
+      <td style="text-align:left" class="muted">Combined debt Rs 58,956 Cr on pro-forma equity Rs 72,039 Cr = 0.82x.</td></tr>
+  
+  <tr><td>Acquirer net worth >= Rs 500 Cr</td><td>72039.0</td><td>>= Rs 500 Cr</td>
+      <td class="pass">PASS</td>
+      <td style="text-align:left" class="muted">Acquirer net worth Rs 72,039 Cr.</td></tr>
+  
+  <tr><td>3-year profitability track record</td><td>True</td><td>user-attested</td>
+      <td class="pass">PASS</td>
+      <td style="text-align:left" class="muted">Attested by user; verify against 3 years of audited financials.</td></tr>
+  
+</table>
+<div class="flag">Optimal mix is constrained: binding constraint(s) — Acquirer cash on hand. Year-1 accretion at the constrained optimum is -20.53%.
+Optimal mix: 0% cash / 100% stock, 62% of cash needs debt-funded
+→ Year-1 -20.5%.</div>
+
+<h3>4c · SEBI Takeover Code (SAST 2011)</h3>
+<p>Acquiring 64% crosses the 25% threshold -> mandatory open offer for 26% of the target at the floor price (modeled at the Rs 6,320 offer price; real floor is the highest-of tests incl. 60-day VWAP).</p>
+
+<ul><li>0% acceptance: buy 0.00 Cr shares for Rs 0 Cr; post-offer holding 64.0%.</li><li>50% acceptance: buy 1.00 Cr shares for Rs 6,348 Cr; post-offer holding 77.0%. BREACHES 75% MPS — must sell down within 12 months or pursue delisting (requires 90%).</li><li>100% acceptance: buy 2.01 Cr shares for Rs 12,696 Cr; post-offer holding 90.0%. BREACHES 75% MPS — must sell down within 12 months or pursue delisting (requires 90%).</li></ul>
+
+<p class="muted">Between 25% and 75%, up to 5% per FY may be acquired without triggering a fresh open offer (creeping acquisition route).</p>
+
+<h3>4d · CCI merger control</h3>
+<p>Deal value Rs 31,253 Cr exceeds the Rs 2,000 Cr deal-value threshold (2024 amendment) — CCI approval required; expect ~150-210 days outer timeline, Green Channel possible if no overlaps.</p>
+</section>
+
+<!-- 5. ACCRETION / DILUTION -->
+<section class="pagebreak">
+<h2>5 · Accretion / Dilution Analysis</h2>
+<table>
+  <tr><th>Year</th><th>Combined NI (₹ Cr)</th><th>Pro-forma shares (Cr)</th>
+      <th>Pro-forma EPS</th><th>Standalone EPS</th><th>Accretion / (Dilution)</th></tr>
+  
+  <tr><td>Year 1</td><td>₹5,286 Cr</td>
+      <td>29.42</td><td>₹179.69</td>
+      <td>₹277.58</td>
+      <td class="fail">-35.27%</td></tr>
+  
+  <tr><td>Year 2</td><td>₹5,490 Cr</td>
+      <td>29.42</td><td>₹186.62</td>
+      <td>₹277.58</td>
+      <td class="fail">-32.77%</td></tr>
+  
+  <tr><td>Year 3</td><td>₹5,559 Cr</td>
+      <td>29.42</td><td>₹188.97</td>
+      <td>₹277.58</td>
+      <td class="fail">-31.92%</td></tr>
+  
+</table>
+<p><strong>Break-even synergies (Year 1): ₹8,067 Cr</strong>
+   vs ₹370 Cr assumed run-rate.</p>
+<p class="muted">Target earnings yield at offer 2.0% vs blended after-tax financing cost 5.7% -> heuristic says DILUTIVE; engine Year-1 says DILUTIVE.</p>
+
+<h3>Contribution analysis</h3>
+<table>
+  <tr><th>Metric</th><th>Acquirer %</th><th>Target %</th></tr>
+  
+  <tr><td>Revenue</td><td>86.6</td><td>13.4</td></tr>
+  
+  <tr><td>EBITDA</td><td>87.8</td><td>12.2</td></tr>
+  
+  <tr><td>Net income</td><td>89.2</td><td>10.8</td></tr>
+  
+  <tr><td>Pro-forma ownership</td><td>100.0</td><td>0.0</td></tr>
+  
+</table>
+<div class="flag">Target shareholders receive 0% ownership while contributing 11% of combined earnings (-11 pts) — premium justification required.</div>
+
+<h3>Sensitivity — Year-1 accretion %</h3>
+<p class="muted">Premium (rows) × run-rate synergies ₹ Cr (columns)</p>
+<table class="grid heat"><tr><th>Premium % \ Synergies Cr</th><th>0.0</th><th>92.0</th><th>185.0</th><th>278.0</th><th>370.0</th><th>462.0</th><th>555.0</th><th>648.0</th><th>740.0</th></tr><tr><th>5.0</th><td style="background:rgba(192,57,43,0.41)">-23.74</td><td style="background:rgba(192,57,43,0.41)">-23.32</td><td style="background:rgba(192,57,43,0.40)">-22.90</td><td style="background:rgba(192,57,43,0.40)">-22.47</td><td style="background:rgba(192,57,43,0.39)">-22.05</td><td style="background:rgba(192,57,43,0.38)">-21.62</td><td style="background:rgba(192,57,43,0.38)">-21.20</td><td style="background:rgba(192,57,43,0.37)">-20.78</td><td style="background:rgba(192,57,43,0.37)">-20.35</td></tr><tr><th>7.5</th><td style="background:rgba(192,57,43,0.43)">-24.50</td><td style="background:rgba(192,57,43,0.42)">-24.07</td><td style="background:rgba(192,57,43,0.41)">-23.65</td><td style="background:rgba(192,57,43,0.41)">-23.23</td><td style="background:rgba(192,57,43,0.40)">-22.80</td><td style="background:rgba(192,57,43,0.40)">-22.38</td><td style="background:rgba(192,57,43,0.39)">-21.95</td><td style="background:rgba(192,57,43,0.38)">-21.53</td><td style="background:rgba(192,57,43,0.38)">-21.11</td></tr><tr><th>10.0</th><td style="background:rgba(192,57,43,0.44)">-25.25</td><td style="background:rgba(192,57,43,0.43)">-24.83</td><td style="background:rgba(192,57,43,0.42)">-24.40</td><td style="background:rgba(192,57,43,0.42)">-23.98</td><td style="background:rgba(192,57,43,0.41)">-23.56</td><td style="background:rgba(192,57,43,0.41)">-23.13</td><td style="background:rgba(192,57,43,0.40)">-22.71</td><td style="background:rgba(192,57,43,0.39)">-22.29</td><td style="background:rgba(192,57,43,0.39)">-21.86</td></tr><tr><th>12.5</th><td style="background:rgba(192,57,43,0.45)">-26.01</td><td style="background:rgba(192,57,43,0.44)">-25.58</td><td style="background:rgba(192,57,43,0.43)">-25.16</td><td style="background:rgba(192,57,43,0.43)">-24.73</td><td style="background:rgba(192,57,43,0.42)">-24.31</td><td style="background:rgba(192,57,43,0.42)">-23.89</td><td style="background:rgba(192,57,43,0.41)">-23.46</td><td style="background:rgba(192,57,43,0.40)">-23.04</td><td style="background:rgba(192,57,43,0.40)">-22.62</td></tr><tr><th>15.0</th><td style="background:rgba(192,57,43,0.46)">-26.76</td><td style="background:rgba(192,57,43,0.45)">-26.34</td><td style="background:rgba(192,57,43,0.45)">-25.91</td><td style="background:rgba(192,57,43,0.44)">-25.49</td><td style="background:rgba(192,57,43,0.43)">-25.07</td><td style="background:rgba(192,57,43,0.43)">-24.64</td><td style="background:rgba(192,57,43,0.42)">-24.22</td><td style="background:rgba(192,57,43,0.42)">-23.79</td><td style="background:rgba(192,57,43,0.41)">-23.37</td></tr><tr><th>17.5</th><td style="background:rgba(192,57,43,0.47)">-27.51</td><td style="background:rgba(192,57,43,0.46)">-27.09</td><td style="background:rgba(192,57,43,0.46)">-26.67</td><td style="background:rgba(192,57,43,0.45)">-26.24</td><td style="background:rgba(192,57,43,0.44)">-25.82</td><td style="background:rgba(192,57,43,0.44)">-25.40</td><td style="background:rgba(192,57,43,0.43)">-24.97</td><td style="background:rgba(192,57,43,0.43)">-24.55</td><td style="background:rgba(192,57,43,0.42)">-24.12</td></tr><tr><th>20.0</th><td style="background:rgba(192,57,43,0.48)">-28.27</td><td style="background:rgba(192,57,43,0.47)">-27.85</td><td style="background:rgba(192,57,43,0.47)">-27.42</td><td style="background:rgba(192,57,43,0.46)">-27.00</td><td style="background:rgba(192,57,43,0.45)">-26.57</td><td style="background:rgba(192,57,43,0.45)">-26.15</td><td style="background:rgba(192,57,43,0.44)">-25.73</td><td style="background:rgba(192,57,43,0.44)">-25.30</td><td style="background:rgba(192,57,43,0.43)">-24.88</td></tr><tr><th>22.5</th><td style="background:rgba(192,57,43,0.49)">-29.02</td><td style="background:rgba(192,57,43,0.48)">-28.60</td><td style="background:rgba(192,57,43,0.48)">-28.18</td><td style="background:rgba(192,57,43,0.47)">-27.75</td><td style="background:rgba(192,57,43,0.47)">-27.33</td><td style="background:rgba(192,57,43,0.46)">-26.90</td><td style="background:rgba(192,57,43,0.45)">-26.48</td><td style="background:rgba(192,57,43,0.45)">-26.06</td><td style="background:rgba(192,57,43,0.44)">-25.63</td></tr><tr><th>25.0</th><td style="background:rgba(192,57,43,0.50)">-29.78</td><td style="background:rgba(192,57,43,0.49)">-29.35</td><td style="background:rgba(192,57,43,0.49)">-28.93</td><td style="background:rgba(192,57,43,0.48)">-28.51</td><td style="background:rgba(192,57,43,0.48)">-28.08</td><td style="background:rgba(192,57,43,0.47)">-27.66</td><td style="background:rgba(192,57,43,0.46)">-27.23</td><td style="background:rgba(192,57,43,0.46)">-26.81</td><td style="background:rgba(192,57,43,0.45)">-26.39</td></tr></table>
+<p class="muted">% cash consideration (rows) × premium (columns)</p>
+<table class="grid heat"><tr><th>% Cash \ Premium %</th><th>5.0</th><th>7.5</th><th>10.0</th><th>12.5</th><th>15.0</th><th>17.5</th><th>20.0</th><th>22.5</th><th>25.0</th></tr><tr><th>0</th><td style="background:rgba(192,57,43,0.22)">-9.59</td><td style="background:rgba(192,57,43,0.23)">-10.01</td><td style="background:rgba(192,57,43,0.24)">-10.43</td><td style="background:rgba(192,57,43,0.24)">-10.85</td><td style="background:rgba(192,57,43,0.25)">-11.27</td><td style="background:rgba(192,57,43,0.25)">-11.68</td><td style="background:rgba(192,57,43,0.26)">-12.10</td><td style="background:rgba(192,57,43,0.27)">-12.51</td><td style="background:rgba(192,57,43,0.27)">-12.92</td></tr><tr><th>10</th><td style="background:rgba(192,57,43,0.24)">-10.75</td><td style="background:rgba(192,57,43,0.25)">-11.20</td><td style="background:rgba(192,57,43,0.25)">-11.65</td><td style="background:rgba(192,57,43,0.26)">-12.10</td><td style="background:rgba(192,57,43,0.27)">-12.54</td><td style="background:rgba(192,57,43,0.27)">-12.99</td><td style="background:rgba(192,57,43,0.28)">-13.43</td><td style="background:rgba(192,57,43,0.29)">-13.87</td><td style="background:rgba(192,57,43,0.29)">-14.32</td></tr><tr><th>20</th><td style="background:rgba(192,57,43,0.26)">-11.93</td><td style="background:rgba(192,57,43,0.27)">-12.41</td><td style="background:rgba(192,57,43,0.27)">-12.89</td><td style="background:rgba(192,57,43,0.28)">-13.36</td><td style="background:rgba(192,57,43,0.29)">-13.84</td><td style="background:rgba(192,57,43,0.29)">-14.32</td><td style="background:rgba(192,57,43,0.30)">-14.79</td><td style="background:rgba(192,57,43,0.31)">-15.26</td><td style="background:rgba(192,57,43,0.32)">-15.73</td></tr><tr><th>30</th><td style="background:rgba(192,57,43,0.28)">-13.12</td><td style="background:rgba(192,57,43,0.28)">-13.63</td><td style="background:rgba(192,57,43,0.29)">-14.14</td><td style="background:rgba(192,57,43,0.30)">-14.65</td><td style="background:rgba(192,57,43,0.31)">-15.16</td><td style="background:rgba(192,57,43,0.31)">-15.67</td><td style="background:rgba(192,57,43,0.32)">-16.17</td><td style="background:rgba(192,57,43,0.33)">-16.67</td><td style="background:rgba(192,57,43,0.34)">-17.18</td></tr><tr><th>40</th><td style="background:rgba(192,57,43,0.29)">-14.34</td><td style="background:rgba(192,57,43,0.30)">-14.88</td><td style="background:rgba(192,57,43,0.31)">-15.42</td><td style="background:rgba(192,57,43,0.32)">-15.96</td><td style="background:rgba(192,57,43,0.33)">-16.50</td><td style="background:rgba(192,57,43,0.33)">-17.04</td><td style="background:rgba(192,57,43,0.34)">-17.58</td><td style="background:rgba(192,57,43,0.35)">-18.11</td><td style="background:rgba(192,57,43,0.36)">-18.65</td></tr><tr><th>50</th><td style="background:rgba(192,57,43,0.31)">-15.57</td><td style="background:rgba(192,57,43,0.32)">-16.15</td><td style="background:rgba(192,57,43,0.33)">-16.72</td><td style="background:rgba(192,57,43,0.34)">-17.30</td><td style="background:rgba(192,57,43,0.35)">-17.87</td><td style="background:rgba(192,57,43,0.36)">-18.44</td><td style="background:rgba(192,57,43,0.36)">-19.01</td><td style="background:rgba(192,57,43,0.37)">-19.58</td><td style="background:rgba(192,57,43,0.38)">-20.15</td></tr><tr><th>60</th><td style="background:rgba(192,57,43,0.33)">-16.83</td><td style="background:rgba(192,57,43,0.34)">-17.43</td><td style="background:rgba(192,57,43,0.35)">-18.04</td><td style="background:rgba(192,57,43,0.36)">-18.65</td><td style="background:rgba(192,57,43,0.37)">-19.26</td><td style="background:rgba(192,57,43,0.38)">-19.86</td><td style="background:rgba(192,57,43,0.39)">-20.47</td><td style="background:rgba(192,57,43,0.40)">-21.07</td><td style="background:rgba(192,57,43,0.40)">-21.67</td></tr><tr><th>70</th><td style="background:rgba(192,57,43,0.35)">-18.10</td><td style="background:rgba(192,57,43,0.36)">-18.74</td><td style="background:rgba(192,57,43,0.37)">-19.39</td><td style="background:rgba(192,57,43,0.38)">-20.03</td><td style="background:rgba(192,57,43,0.39)">-20.67</td><td style="background:rgba(192,57,43,0.40)">-21.31</td><td style="background:rgba(192,57,43,0.41)">-21.95</td><td style="background:rgba(192,57,43,0.42)">-22.59</td><td style="background:rgba(192,57,43,0.43)">-23.23</td></tr><tr><th>80</th><td style="background:rgba(192,57,43,0.37)">-19.39</td><td style="background:rgba(192,57,43,0.38)">-20.07</td><td style="background:rgba(192,57,43,0.39)">-20.75</td><td style="background:rgba(192,57,43,0.40)">-21.43</td><td style="background:rgba(192,57,43,0.41)">-22.11</td><td style="background:rgba(192,57,43,0.42)">-22.79</td><td style="background:rgba(192,57,43,0.43)">-23.46</td><td style="background:rgba(192,57,43,0.44)">-24.14</td><td style="background:rgba(192,57,43,0.45)">-24.82</td></tr><tr><th>90</th><td style="background:rgba(192,57,43,0.39)">-20.71</td><td style="background:rgba(192,57,43,0.40)">-21.43</td><td style="background:rgba(192,57,43,0.41)">-22.14</td><td style="background:rgba(192,57,43,0.42)">-22.86</td><td style="background:rgba(192,57,43,0.43)">-23.57</td><td style="background:rgba(192,57,43,0.44)">-24.29</td><td style="background:rgba(192,57,43,0.45)">-25.00</td><td style="background:rgba(192,57,43,0.46)">-25.72</td><td style="background:rgba(192,57,43,0.48)">-26.43</td></tr><tr><th>100</th><td style="background:rgba(192,57,43,0.41)">-22.05</td><td style="background:rgba(192,57,43,0.42)">-22.80</td><td style="background:rgba(192,57,43,0.43)">-23.56</td><td style="background:rgba(192,57,43,0.44)">-24.31</td><td style="background:rgba(192,57,43,0.45)">-25.07</td><td style="background:rgba(192,57,43,0.47)">-25.82</td><td style="background:rgba(192,57,43,0.48)">-26.57</td><td style="background:rgba(192,57,43,0.49)">-27.33</td><td style="background:rgba(192,57,43,0.50)">-28.08</td></tr></table>
+</section>
+
+<!-- 5.5 VALUE CREATION -->
+<section class="pagebreak">
+<h2>5.5 · Value Creation Assessment</h2>
+<table>
+  <tr><th>Bridge component</th><th>₹ Cr</th></tr>
+  <tr><td>PV of after-tax synergies (perpetuity at 12.0% WACC)</td>
+      <td>₹2,307 Cr</td></tr>
+  <tr><td>Control premium paid</td><td>(₹5,732 Cr)</td></tr>
+  <tr class="total"><td>Net value created / (destroyed)</td>
+      <td class="fail">
+      ₹-3,425 Cr</td></tr>
+</table>
+<p>Incremental ROIC 2.6% vs WACC
+   12.0% —
+   <span class="fail">
+   returns below the cost of capital</span>.</p>
+
+</section>
+
+<!-- 6. RISK ANALYSIS -->
+<section>
+<h2>6 · Risk Analysis</h2>
+<p>Probability of accretion by Year 2: 0% (P5: -34.0%, P95: -32.3%). Year-1: P5 -37.4% · P50 -35.6% · P95 -34.7%.</p>
+<svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" role="img">
+<text x="10" y="16" font-size="12" fill="#070B14" font-weight="bold">Year-2 accretion distribution (10,000 iterations)</text>
+<rect x="10.0" y="184.6" width="18.4" height="11.4" fill="#070B14" opacity="0.85"/><rect x="29.4" y="177.0" width="18.4" height="19.0" fill="#070B14" opacity="0.85"/><rect x="48.8" y="160.0" width="18.4" height="36.0" fill="#070B14" opacity="0.85"/><rect x="68.1" y="159.4" width="18.4" height="36.6" fill="#070B14" opacity="0.85"/><rect x="87.5" y="142.7" width="18.4" height="53.3" fill="#070B14" opacity="0.85"/><rect x="106.9" y="131.3" width="18.4" height="64.7" fill="#070B14" opacity="0.85"/><rect x="126.2" y="111.3" width="18.4" height="84.7" fill="#070B14" opacity="0.85"/><rect x="145.6" y="94.3" width="18.4" height="101.7" fill="#070B14" opacity="0.85"/><rect x="165.0" y="74.1" width="18.4" height="121.9" fill="#070B14" opacity="0.85"/><rect x="184.4" y="61.0" width="18.4" height="135.0" fill="#070B14" opacity="0.85"/><rect x="203.8" y="35.8" width="18.4" height="160.2" fill="#070B14" opacity="0.85"/><rect x="223.1" y="42.3" width="18.4" height="153.7" fill="#070B14" opacity="0.85"/><rect x="242.5" y="38.7" width="18.4" height="157.2" fill="#070B14" opacity="0.85"/><rect x="261.9" y="44.0" width="18.4" height="152.0" fill="#070B14" opacity="0.85"/><rect x="281.2" y="51.5" width="18.4" height="144.5" fill="#070B14" opacity="0.85"/><rect x="300.6" y="66.9" width="18.4" height="129.1" fill="#070B14" opacity="0.85"/><rect x="320.0" y="68.8" width="18.4" height="127.2" fill="#070B14" opacity="0.85"/><rect x="339.4" y="77.3" width="18.4" height="118.7" fill="#070B14" opacity="0.85"/><rect x="358.8" y="60.7" width="18.4" height="135.3" fill="#070B14" opacity="0.85"/><rect x="378.1" y="53.1" width="18.4" height="142.9" fill="#070B14" opacity="0.85"/><rect x="397.5" y="41.0" width="18.4" height="155.0" fill="#070B14" opacity="0.85"/><rect x="416.9" y="26.0" width="18.4" height="170.0" fill="#070B14" opacity="0.85"/><rect x="436.2" y="35.8" width="18.4" height="160.2" fill="#070B14" opacity="0.85"/><rect x="455.6" y="47.2" width="18.4" height="148.8" fill="#070B14" opacity="0.85"/><rect x="475.0" y="78.3" width="18.4" height="117.7" fill="#070B14" opacity="0.85"/><rect x="494.4" y="79.3" width="18.4" height="116.7" fill="#070B14" opacity="0.85"/><rect x="513.8" y="105.4" width="18.4" height="90.6" fill="#070B14" opacity="0.85"/><rect x="533.1" y="119.5" width="18.4" height="76.5" fill="#070B14" opacity="0.85"/><rect x="552.5" y="136.2" width="18.4" height="59.8" fill="#070B14" opacity="0.85"/><rect x="571.9" y="149.9" width="18.4" height="46.1" fill="#070B14" opacity="0.85"/><rect x="591.2" y="166.9" width="18.4" height="29.1" fill="#070B14" opacity="0.85"/><rect x="610.6" y="182.3" width="18.4" height="13.7" fill="#070B14" opacity="0.85"/>
+<line x1="330.6" y1="26" x2="330.6" y2="196" stroke="#C9A84C" stroke-width="2"/>
+<text x="334.6" y="38" font-size="10" fill="#C9A84C">P50 -33.2%</text>
+<line x1="10" y1="196" x2="630" y2="196" stroke="#070B14"/>
+<text x="10" y="222" font-size="10" fill="#444">-34.4%</text>
+<text x="630" y="222" font-size="10" fill="#444" text-anchor="end">-32.0%</text>
+</svg>
+
+
+<h3>Key risks</h3>
+<ul><li>CCI review of regional market-share concentration</li><li>MPS breach at high open-offer acceptance forces sell-down or delisting attempt</li><li>Cement cycle timing risk on acquired capacity</li></ul>
+
+</section>
+
+<!-- 7. APPENDIX -->
+<section class="pagebreak">
+<h2>7 · Appendix — Methodology &amp; Sources</h2>
+<ul class="muted">
+  <li>Engine: Year 1–3 pro-forma EPS vs standalone acquirer EPS held flat; combined NI = acquirer NI + owned% × target NI + after-tax phased synergies − after-tax new interest − after-tax foregone cash yield − after-tax incremental D&amp;A − after-tax Year-1 integration costs.</li>
+  <li>PPA: intangible write-up on excess over owned book value, DTL at deal tax rate, straight-line amortization; PP&amp;E step-up out of scope.</li>
+  <li>RBI: Commercial Banks – Credit Facilities (Amendment) Directions 2026 — 75% funding cap, 25% equity floor, 3:1 consolidated D/E, ₹500 Cr net worth, 3-yr profitability (user-attested). Verify against the master direction.</li>
+  <li>SEBI SAST 2011: 25% open-offer trigger, minimum 26% offer size; floor modeled at deal offer price (real floor = highest-of tests incl. 60-day VWAP). MPS per SCRR 19A.</li>
+  <li>Monte Carlo: 10,000 seeded iterations; synergies triangular (50/100/130% of base), integration costs lognormal, phase-in delay discrete.</li>
+  <li>Value bridge: after-tax synergy perpetuity at user WACC (0% growth) less control premium on shares acquired.</li>
+  <li>Data: yfinance (prices, financials), Screener.in exports (fundamentals fallback), curated precedent DB from SEBI SAST letters of offer and NSE/BSE filings. Debt cost anchored to RBI DBIE lending-rate publications; risk-free = 10Y G-Sec (CCIL/FIMMDA). No paid APIs, no scraping, no LLM calls.</li>
+  <li><strong>Disclaimer:</strong> Illustrative analysis on public data for portfolio demonstration. Precedent entries marked ILLUSTRATIVE are unverified. Not investment advice, not a solicitation, not a fairness opinion.</li>
+</ul>
+</section>
+</body>
+</html>

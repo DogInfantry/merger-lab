@@ -25,7 +25,12 @@
   .footer-band { position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
                  font-size: 7.5pt; color: var(--muted); padding: 2mm 0;
                  border-top: 0.5pt solid #d8dbe0; background: #fff; }
-  @media screen { .footer-band { display: none; } }
+  @media screen {
+    html { background: #070B14; }
+    body { max-width: 880px; margin: 28px auto; background: #fff; padding: 0 40px 44px;
+           box-shadow: 0 10px 50px rgba(0,0,0,0.55); border-radius: 2px; }
+    .footer-band { display: none; }
+  }
 
   .cover { background: var(--navy); color: #eef0f4; padding: 34px 30px; margin-bottom: 14px; }
   .cover .lab { font-family: "IBM Plex Mono", monospace; color: var(--gold);
@@ -119,6 +124,57 @@ sector precedents (Merger Lab precedent DB; entries marked ILLUSTRATIVE pending 
 <p class="muted">Verified rows link to the SEBI letter of offer or exchange filing; premiums shown only where the open-offer price vs pre-announcement close is public. Blank premiums/multiples are honestly withheld, not estimated.</p>
 {% endif %}
 </section>
+
+<!-- 2b. STANDALONE VALUATION -->
+{% if pkg.dcf or pkg.trading_comps %}
+<section>
+<h2>2b · Standalone Valuation <span class="muted">— intrinsic vs the offer</span></h2>
+{% if football_svg %}{{ football_svg }}{% endif %}
+<p class="muted">Where the target trades on its own economics — independent of the deal.
+The offer (red) sits against a DCF intrinsic range and listed-peer trading comps;
+gold tick = central estimate. Accretion is relative; this is the absolute check.</p>
+
+{% if pkg.dcf %}
+<h3>Discounted cash flow (unlevered FCFF)</h3>
+<p>{{ pkg.dcf.narrative }}</p>
+<table>
+  <tr><th>Enterprise value</th><th>Equity value</th><th>Value / share</th><th>vs market</th><th>Terminal weight</th></tr>
+  <tr>
+    <td>{{ pkg.dcf.ev_cr|inr }}</td>
+    <td>{{ pkg.dcf.equity_value_cr|inr }}</td>
+    <td>₹{{ pkg.dcf.value_per_share|num(0) }}</td>
+    <td>{{ pkg.dcf.upside_vs_price_pct|pct(0) }}</td>
+    <td>{{ (pkg.dcf.terminal_frac * 100)|num(0) }}%</td>
+  </tr>
+</table>
+<p class="muted">Assumptions: WACC {{ (pkg.dcf.assumptions.wacc * 100)|num(1) }}%,
+revenue growth {{ (pkg.dcf.assumptions.rev_growth * 100)|num(1) }}%,
+terminal growth {{ (pkg.dcf.assumptions.terminal_growth * 100)|num(1) }}%,
+EBITDA margin {{ (pkg.dcf.assumptions.ebitda_margin * 100)|num(1) }}%,
+over {{ pkg.dcf.assumptions.years|num(0) }} explicit years. Tunable drivers, not fitted.</p>
+{% endif %}
+
+{% if pkg.trading_comps and pkg.trading_comps.value_per_share %}
+<h3>Trading comps <span class="muted">(listed peers)</span></h3>
+<p>{{ pkg.trading_comps.narrative }}</p>
+<table class="grid">
+  <tr><th>Peer</th><th>EV/EBITDA</th><th>EV/Sales</th><th>P/E</th></tr>
+  {% for r in tc_peer_rows %}
+  <tr>
+    <td style="text-align:left">{{ r.peer }}</td>
+    <td>{{ r.ev_ebitda|num(1) }}x</td>
+    <td>{{ r.ev_sales|num(1) }}x</td>
+    <td>{{ r.pe|num(1) }}x</td>
+  </tr>
+  {% endfor %}
+  <tr class="total"><td style="text-align:left">Median</td>
+    <td>{{ pkg.trading_comps.median_ev_ebitda|num(1) }}x</td>
+    <td>{{ pkg.trading_comps.median_ev_sales|num(1) }}x</td>
+    <td>{{ pkg.trading_comps.median_pe|num(1) }}x</td></tr>
+</table>
+{% endif %}
+</section>
+{% endif %}
 
 <!-- 3. STRATEGIC RATIONALE -->
 {% if pkg.strategic_rationale %}

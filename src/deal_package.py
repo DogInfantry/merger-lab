@@ -28,7 +28,9 @@ from accretion_dilution import ADResult, run_deal
 from collar import CollarAnalysis, price_collar
 from contribution import build_contribution
 from data_layer import CompanyFinancials
+from dcf import DCFResult, run_dcf
 from deal import DealTerms
+from trading_comps import TradingCompsResult, compute_trading_comps
 from monte_carlo import MCResult, run_monte_carlo
 from optimizer import OptimizerResult, optimize_financing_mix
 from rbi_compliance import RBIComplianceReport, check_rbi_compliance
@@ -68,6 +70,9 @@ class DealPackage:
     pe_offer: float | None
     sector_premium_percentile: float | None
     sector_comps: pd.DataFrame | None
+    dcf: DCFResult | None = None
+    trading_comps: TradingCompsResult | None = None
+    valuation_ranges: list = field(default_factory=list)  # football-field rows
     recommendation: str = ""
     recommendation_rationale: str = ""
 
@@ -125,6 +130,7 @@ def build_deal_package(
     risk_free_rate: float = 0.07,
     precedent_conn=None,
     sector: str | None = None,
+    peers: list[CompanyFinancials] | None = None,
 ) -> DealPackage:
     deal_value = terms.offer_price * target.shares_out_cr * terms.stake_pct / 100
     sast = evaluate_sast(target, terms, deal_value_cr=deal_value)
@@ -167,6 +173,22 @@ def build_deal_package(
                  if target.ebitda_cr else None)
     pe = equity_at_offer / target.net_income_cr if target.net_income_cr else None
 
+    # Standalone valuation (target-intrinsic): DCF always attempted, trading
+    # comps only when a peer set is supplied. Both degrade to None on thin data
+    # rather than fabricate — the football field simply drops the missing bar.
+    dcf = None
+    try:
+        dcf = run_dcf(target, wacc=wacc)
+    except (AssertionError, ZeroDivisionError, TypeError):
+        dcf = None
+    tcomps = None
+    if peers:
+        try:
+            tcomps = compute_trading_comps(target, peers)
+        except Exception:
+            tcomps = None
+    valuation_ranges = _valuation_ranges(dcf, tcomps)
+
     percentile, comps = None, None
     if precedent_conn is not None and sector:
         from precedent_db import comparable_deals
@@ -190,6 +212,20 @@ def build_deal_package(
         optimizer=opt, mc=mc, value_bridge=vb, collar=collar,
         premium_pct=premium_pct, ev_ebitda_offer=ev_ebitda, pe_offer=pe,
         sector_premium_percentile=percentile, sector_comps=comps,
+        dcf=dcf, trading_comps=tcomps, valuation_ranges=valuation_ranges,
     )
     pkg._decide()
     return pkg
+
+
+def _valuation_ranges(dcf: DCFResult | None,
+                      tcomps: TradingCompsResult | None) -> list[dict]:
+    """Football-field rows: one per valuation method that produced a range."""
+    rows: list[dict] = []
+    if dcf is not None:
+        rows.append({"method": "DCF (intrinsic)", "low": dcf.per_share_low,
+                     "high": dcf.per_share_high, "mid": dcf.value_per_share})
+    if tcomps is not None and tcomps.value_per_share is not None:
+        rows.append({"method": "Trading comps", "low": tcomps.per_share_low,
+                     "high": tcomps.per_share_high, "mid": tcomps.value_per_share})
+    return rows
